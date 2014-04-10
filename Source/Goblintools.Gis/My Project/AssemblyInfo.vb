@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Goblintools")> 
+<Assembly: AssemblyTitle("Goblintools.Gis")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Joost Vermeulen")> 
-<Assembly: AssemblyProduct("Goblintools")> 
-<Assembly: AssemblyCopyright("Copyright © Joost Vermeulen 2014")> 
+<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyProduct("Goblintools.Gis")> 
+<Assembly: AssemblyCopyright("Copyright ©  2014")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("bb2781fe-ef1e-4384-a84c-bcdec7bebcb7")> 
+<Assembly: Guid("f369a1c2-71a3-4d4d-8a22-1f904e770fb9")> 
 
 ' Version information for an assembly consists of the following four values:
 '
