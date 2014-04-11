@@ -19,7 +19,7 @@ Public Class GrdReader
         Dim file As New GrdFile()
 
         file.Header = ReadHeader()
-        file.Records = ReadRecords()
+        file.Values = ReadRecords()
 
         Return file
     End Function
@@ -40,8 +40,8 @@ Public Class GrdReader
                 Throw New ArgumentException("Unable to reader header. Stream is not a valid GRD file.")
             End If
 
-            Header.SizeX = Reader.ReadInt16()
-            Header.SizeY = Reader.ReadInt16()
+            Header.Width = Reader.ReadInt16()
+            Header.Height = Reader.ReadInt16()
             Header.MinX = Reader.ReadDouble()
             Header.MaxX = Reader.ReadDouble()
             Header.MinY = Reader.ReadDouble()
@@ -53,30 +53,30 @@ Public Class GrdReader
         Return Me.Header
     End Function
 
-    Public Function ReadRecords() As Single()
+    Public Function ReadRecords() As Single(,)
         If Me.Header Is Nothing Then
             Me.Header = ReadHeader()
         End If
 
-        Dim records(Me.Header.NumberOfRecords - 1) As Single
+        Dim records(Me.Header.Width - 1, Me.Header.Height - 1) As Single
 
-        For i As Integer = 0 To records.Length - 1
-            records(i) = ReadRecord(i)
+        For w As Integer = 0 To records.GetLength(0) - 1
+            For h As Integer = 0 To records.GetLength(1) - 1
+                records(w, h) = ReadRecord(w, h)
+            Next
         Next
 
         Return records
     End Function
 
-    Public Function ReadRecord(index As Integer) As Single
-        Dim value As Single
+    Public Function ReadRecord(w As Integer, h As Integer) As Single
+        Me.Reader.BaseStream.Position = GrdHeader.SizeInBytes + Me.Header.GetIndex(w, h) * 4
 
-        If (GrdHeader.SizeInBytes + index * 4 > Me.Reader.BaseStream.Position + 4) Then
+        If (Me.Reader.BaseStream.Position + 4 > Me.Reader.BaseStream.Length) Then
             Throw New ArgumentException("Unable to read record. Stream is too short.")
         End If
 
-        value = Reader.ReadSingle()
-
-        Return value
+        Return Reader.ReadSingle()
     End Function
 
 #Region " IDisposable "
