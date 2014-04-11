@@ -1,7 +1,16 @@
 ﻿Imports System.Drawing
 
+''' <summary>
+''' An image representation of a GRD file.
+''' </summary>
 Public Class GrdImage
 
+    ''' <summary>
+    ''' Creates an image from the values in GRD file.
+    ''' </summary>
+    ''' <param name="file">The source data.</param>
+    ''' <param name="colored">When true, uses red and blue for positive and negative values.</param>
+    ''' <param name="alpha">Use transparency.</param>
     Public Shared Function CreateImage(file As GrdFile, colored As Boolean, alpha As Boolean) As Image
         Dim result As New Bitmap(file.Header.SizeX, file.Header.SizeY)
 
@@ -29,52 +38,47 @@ Public Class GrdImage
 
                 Dim record As Single = file.Records(i)
 
+                Dim value As Single
+                Dim a As Byte
                 Dim r As Byte
                 Dim g As Byte
                 Dim b As Byte
-                Dim a As Byte
 
                 If record < file.Header.MinValue Or record > file.Header.MaxValue Then
                     a = 0
                 Else
-                    Dim value As Single = (record - file.Header.MinValue) / (file.Header.DeltaValue)
-
                     If colored Then
-                        If alpha Then
-                            If record > 0 Then
-                                If multiColor Then
-                                    value = (record / file.Header.MaxValue) * maxFactor
-                                End If
+                        If record > 0 Then
+                            If multiColor Then
+                                value = (record / file.Header.MaxValue) * maxFactor
+                            Else
+                                value = (record - file.Header.MinValue) / (file.Header.DeltaValue)
+                            End If
 
+                            If alpha Then
                                 a = value * 255
                                 r = 255
                                 g = 0
                                 b = 0
                             Else
-                                If multiColor Then
-                                    value = (record / file.Header.MinValue) * minFactor
-                                End If
-
-                                a = value * 255
-                                r = 0
-                                g = 0
-                                b = 255
-                            End If
-                        Else
-                            If record > 0 Then
-                                If multiColor Then
-                                    value = (record / file.Header.MaxValue) * maxFactor
-                                End If
-
                                 a = 255
                                 r = 255
                                 g = 255 - value * 255
                                 b = 255 - value * 255
+                            End If
+                        Else
+                            If multiColor Then
+                                value = (record / file.Header.MinValue) * minFactor
                             Else
-                                If multiColor Then
-                                    value = (record / file.Header.MinValue) * minFactor
-                                End If
+                                value = (record - file.Header.MinValue) / (file.Header.DeltaValue)
+                            End If
 
+                            If alpha Then
+                                a = value * 255
+                                r = 0
+                                g = 0
+                                b = 255
+                            Else
                                 a = 255
                                 r = 255 - value * 255
                                 g = 255 - value * 255
@@ -82,26 +86,13 @@ Public Class GrdImage
                             End If
                         End If
                     Else
+                        value = (record - file.Header.MinValue) / (file.Header.DeltaValue)
+
                         If alpha Then
-                            If record > 0 Then
-                                If multiColor Then
-                                    value = (record / file.Header.MaxValue) * maxFactor
-                                End If
-
-                                a = value * 255
-                                r = 255
-                                g = 255
-                                b = 255
-                            Else
-                                If multiColor Then
-                                    value = (record / file.Header.MinValue) * minFactor
-                                End If
-
-                                a = value * 255
-                                r = 0
-                                g = 0
-                                b = 0
-                            End If
+                            a = 255 - value * 255
+                            r = 0
+                            g = 0
+                            b = 0
                         Else
                             a = 255
                             r = value * 255
