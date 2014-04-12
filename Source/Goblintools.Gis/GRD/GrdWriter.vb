@@ -15,7 +15,7 @@ Public Class GrdWriter
 
     Public Sub WriteFile(file As GrdFile)
         WriteHeader(file.Header)
-        WriteRecords(file.Values)
+        WriteValues(file.Values)
     End Sub
 
     Public Sub WriteHeader(header As GrdHeader)
@@ -31,10 +31,10 @@ Public Class GrdWriter
         Me.Writer.Write(header.MaxValue)
     End Sub
 
-    Public Sub WriteRecords(records As Single(,))
-        For w As Integer = 0 To records.GetLength(0) - 1
-            For h As Integer = 0 To records.GetLength(1) - 1
-                Me.Writer.Write(records(w, h))
+    Public Sub WriteValues(values As Single(,))
+        For w As Integer = 0 To values.GetLength(0) - 1
+            For h As Integer = 0 To values.GetLength(1) - 1
+                Me.Writer.Write(values(w, h))
             Next
         Next
     End Sub

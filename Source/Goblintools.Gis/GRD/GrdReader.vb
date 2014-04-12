@@ -19,7 +19,7 @@ Public Class GrdReader
         Dim file As New GrdFile()
 
         file.Header = ReadHeader()
-        file.Values = ReadRecords()
+        file.Values = ReadValues()
 
         Return file
     End Function
@@ -53,28 +53,30 @@ Public Class GrdReader
         Return Me.Header
     End Function
 
-    Public Function ReadRecords() As Single(,)
+    Public Function ReadValues() As Single(,)
         If Me.Header Is Nothing Then
             Me.Header = ReadHeader()
         End If
 
-        Dim records(Me.Header.Width - 1, Me.Header.Height - 1) As Single
+        Me.Reader.BaseStream.Position = GrdHeader.SizeInBytes
 
-        For w As Integer = 0 To records.GetLength(0) - 1
-            For h As Integer = 0 To records.GetLength(1) - 1
-                records(w, h) = ReadRecord(w, h)
+        Dim values(Me.Header.Width - 1, Me.Header.Height - 1) As Single
+
+        For w As Integer = 0 To Me.Header.Width - 1
+            For h As Integer = 0 To Me.Header.Height - 1
+                values(w, h) = ReadValue(w, h)
             Next
         Next
 
-        Return records
+        Return values
     End Function
 
-    Public Function ReadRecord(w As Integer, h As Integer) As Single
-        Me.Reader.BaseStream.Position = GrdHeader.SizeInBytes + Me.Header.GetIndex(w, h) * 4
+    Public Function ReadValue(w As Integer, h As Integer) As Single
+        Dim position As Integer = GrdHeader.SizeInBytes + Me.Header.GetIndex(w, h) * 4
+        
+        If (position + 4 > Me.Reader.BaseStream.Length) Then Throw New ArgumentException("Unable to read value. Stream is too short.")
 
-        If (Me.Reader.BaseStream.Position + 4 > Me.Reader.BaseStream.Length) Then
-            Throw New ArgumentException("Unable to read record. Stream is too short.")
-        End If
+        Me.Reader.BaseStream.Position = position
 
         Return Reader.ReadSingle()
     End Function
