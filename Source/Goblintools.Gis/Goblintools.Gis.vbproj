@@ -65,7 +65,6 @@
   <ItemGroup>
     <Compile Include="GRD\GrdFile.vb" />
     <Compile Include="GRD\GrdHeader.vb" />
-    <Compile Include="GRD\GrdImage.vb" />
     <Compile Include="GRD\GrdReader.vb" />
     <Compile Include="GRD\GrdWriter.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

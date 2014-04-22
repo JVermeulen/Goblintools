@@ -4,21 +4,25 @@ Imports Goblintools.Gis
 Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ConvertGrdToPng("x2c")
-
-        Me.Close()
+        Me.TextBox1.Text = Path.Combine(My.Application.Info.DirectoryPath, "Resources", "x2c" & GrdFile.Extension)
     End Sub
 
-    Public Sub ConvertGrdToPng(name As String)
-        Dim file As GrdFile
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
+        CreateImage()
+    End Sub
 
-        Using reader As New GrdReader(Path.Combine(My.Application.Info.DirectoryPath, "Resources", name & GrdFile.Extension))
-            file = reader.ReadFile()
-        End Using
+    Private Sub CreateImage()
+        If File.Exists(Me.TextBox1.Text) Then
+            Dim file As GrdFile
 
-        Dim value As Single = file.GetValueBilinear(155000, 463000)
+            Using reader As New GrdReader(Me.TextBox1.Text)
+                file = reader.ReadFile()
+            End Using
 
-        GrdImage.CreateImage(file, True, True).Save(Path.Combine(My.Application.Info.DirectoryPath, name & "." & Imaging.ImageFormat.Png.ToString()), Imaging.ImageFormat.Png)
+            Me.PictureBox1.Image = file.CreateImage(True, True)
+
+            'Path.Combine(My.Application.Info.DirectoryPath, name & "." & Imaging.ImageFormat.Png.ToString()), Imaging.ImageFormat.Png
+        End If
     End Sub
 
 End Class
