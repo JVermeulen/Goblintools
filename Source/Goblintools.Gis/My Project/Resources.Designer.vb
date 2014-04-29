@@ -63,30 +63,40 @@ Namespace My.Resources
         '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
+        Friend ReadOnly Property MapInfow_clr() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("MapInfow_clr", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
         Friend ReadOnly Property nlgeo04_grd() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("nlgeo04_grd", resourceCulture)
-                Return CType(obj, Byte())
+                Return CType(obj,Byte())
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
         Friend ReadOnly Property x2c_grd() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("x2c_grd", resourceCulture)
-                Return CType(obj, Byte())
+                Return CType(obj,Byte())
             End Get
         End Property
-
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Byte[].
         '''</summary>
         Friend ReadOnly Property y2c_grd() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("y2c_grd", resourceCulture)
-                Return CType(obj, Byte())
+                Return CType(obj,Byte())
             End Get
         End Property
     End Module

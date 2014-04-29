@@ -63,6 +63,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CLR\ClrFile.vb" />
+    <Compile Include="CLR\ClrHeader.vb" />
     <Compile Include="GRD\GrdFile.vb" />
     <Compile Include="GRD\GrdHeader.vb" />
     <Compile Include="GRD\GrdReader.vb" />
@@ -100,6 +102,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Resources\MapInfow.clr">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resources\nlgeo04.grd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
