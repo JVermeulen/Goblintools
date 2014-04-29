@@ -39,7 +39,7 @@ Public Class GrdFile
         If column < 0 Then
             Throw New ArgumentOutOfRangeException("Unable to get value. Parameter column is too low.")
         End If
-        If column > Me.Header.Width Then
+        If column > Me.Header.ColumnCount Then
             Throw New ArgumentOutOfRangeException("Unable to get value. Parameter column is too high.")
         End If
 
@@ -47,7 +47,7 @@ Public Class GrdFile
         If row < 0 Then
             Throw New ArgumentOutOfRangeException("Unable to get value. Parameter row is too low.")
         End If
-        If row > Me.Header.Height Then
+        If row > Me.Header.RowCount Then
             Throw New ArgumentOutOfRangeException("Unable to get value. Parameter row is too high.")
         End If
 
@@ -60,8 +60,8 @@ Public Class GrdFile
     ''' <param name="x">The x-coordinate.</param>
     ''' <param name="y">The y-coordinate.</param>
     Public Function GetValueNearestNeighbor(x As Double, y As Double) As Single
-        Dim column As Double = Me.Header.GetW(x)
-        Dim row As Double = Me.Header.GetH(y)
+        Dim column As Double = Me.Header.GetColumn(x)
+        Dim row As Double = Me.Header.GetRow(y)
 
         Return Me.GetValue(Math.Round(column), Math.Round(row))
     End Function
@@ -72,8 +72,8 @@ Public Class GrdFile
     ''' <param name="x">The x-coordinate.</param>
     ''' <param name="y">The y-coordinate.</param>
     Public Function GetValueBilinear(x As Double, y As Double) As Single
-        Dim column As Double = Me.Header.GetW(x)
-        Dim row As Double = Me.Header.GetH(y)
+        Dim column As Double = Me.Header.GetColumn(x)
+        Dim row As Double = Me.Header.GetRow(y)
 
         Dim c As Integer = Math.Floor(column)
         Dim r As Integer = Math.Floor(row)
@@ -95,8 +95,8 @@ Public Class GrdFile
     ''' <param name="x">The x-coordinate.</param>
     ''' <param name="y">The y-coordinate.</param>
     Public Function GetValueBicubic(x As Double, y As Double) As Single
-        Dim column As Double = Me.Header.GetW(x)
-        Dim row As Double = Me.Header.GetH(y)
+        Dim column As Double = Me.Header.GetColumn(x)
+        Dim row As Double = Me.Header.GetRow(y)
 
         Throw New NotImplementedException()
     End Function
@@ -107,8 +107,9 @@ Public Class GrdFile
     ''' <param name="useColor">When true, uses red and blue for positive and negative values.</param>
     ''' <param name="useAlpha">Use transparency.</param>
     Public Function CreateImage(useColor As Boolean, useAlpha As Boolean) As Image
-        Dim result As New Bitmap(Me.Header.Width, Me.Header.Height)
+        Dim result As New Bitmap(Me.Header.ColumnCount, Me.Header.RowCount)
 
+        'When both negative and positive numbers are available, two color will be shown.
         Dim multiColor As Boolean = Me.Header.MinValue < 0 And Me.Header.MaxValue > 0
 
         Dim negativeFactor As Double
@@ -127,8 +128,8 @@ Public Class GrdFile
             End If
         End If
 
-        For column As Integer = 0 To Me.Header.Width - 1
-            For index As Integer = 0 To Me.Header.Height - 1
+        For column As Integer = 0 To Me.Header.ColumnCount - 1
+            For index As Integer = 0 To Me.Header.RowCount - 1
                 Dim value As Single = Me.Values(column, index)
 
                 Dim factor As Single

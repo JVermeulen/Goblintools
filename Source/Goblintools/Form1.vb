@@ -25,4 +25,12 @@ Public Class Form1
         End If
     End Sub
 
+    Private Sub cmdOK_Click(sender As Object, e As EventArgs) Handles cmdOK.Click
+        Me.Close()
+    End Sub
+
+    Private Sub cmdCancel_Click(sender As Object, e As EventArgs) Handles cmdCancel.Click
+        Me.Close()
+    End Sub
+
 End Class

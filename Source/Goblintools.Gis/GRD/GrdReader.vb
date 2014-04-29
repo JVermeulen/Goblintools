@@ -64,8 +64,8 @@ Public Class GrdReader
                 Throw New ArgumentException("Unable to reader header. Stream is not a valid GRD file.")
             End If
 
-            Header.Width = Reader.ReadInt16()
-            Header.Height = Reader.ReadInt16()
+            Header.ColumnCount = Reader.ReadInt16()
+            Header.RowCount = Reader.ReadInt16()
             Header.MinX = Reader.ReadDouble()
             Header.MaxX = Reader.ReadDouble()
             Header.MinY = Reader.ReadDouble()
@@ -87,10 +87,10 @@ Public Class GrdReader
 
         Me.Reader.BaseStream.Position = GrdHeader.SizeInBytes
 
-        Dim values(Me.Header.Width - 1, Me.Header.Height - 1) As Single
+        Dim values(Me.Header.ColumnCount - 1, Me.Header.RowCount - 1) As Single
 
-        For column As Integer = 0 To Me.Header.Width - 1
-            For row As Integer = 0 To Me.Header.Height - 1
+        For column As Integer = 0 To Me.Header.ColumnCount - 1
+            For row As Integer = 0 To Me.Header.RowCount - 1
                 values(column, row) = ReadValue(column, row)
             Next
         Next

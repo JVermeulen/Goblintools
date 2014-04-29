@@ -43,8 +43,8 @@ Public Class GrdWriter
     Public Sub WriteHeader(header As GrdHeader)
         Me.Writer.Write(ASCII.GetBytes(GrdHeader.Code))
 
-        Me.Writer.Write(CType(header.Width, Int16))
-        Me.Writer.Write(CType(header.Height, Int16))
+        Me.Writer.Write(CType(header.ColumnCount, Int16))
+        Me.Writer.Write(CType(header.RowCount, Int16))
         Me.Writer.Write(header.MinX)
         Me.Writer.Write(header.MaxX)
         Me.Writer.Write(header.MinY)
