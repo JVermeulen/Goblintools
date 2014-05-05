@@ -4,13 +4,16 @@ Imports Goblintools.Gis.GRD
 Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.TextBox1.Text = Path.Combine(My.Application.Info.DirectoryPath, "Resources", "x2c" & GrdFile.Extension)
+        'Me.TextBox1.Text = Path.Combine(My.Application.Info.DirectoryPath, "Resources", "x2c" & GrdFile.Extension)
 
         'Using stream As New MemoryStream({205, 202, 0, 1})
         '    Using reader As New BinaryReader(stream)
         '        Dim i As Int32 = reader.ReadInt32()
         '    End Using
         'End Using
+
+        Dim t As New Goblintools.Gis.Test()
+        t.go()
     End Sub
 
     Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles TextBox1.TextChanged
