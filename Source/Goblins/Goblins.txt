@@ -1,0 +1,25 @@
+ID	MESSAGE
+------------
+0	INFO
+1	LED
+2	DHT22
+
+
+ID	COMMAND	DESCRIPTION
+-----------
+0	DISABLE	Disable the device
+1	ENABLE	Enable the device
+2	GET		Get the value from the device
+3	SET		Set the value to the device
+4	LOAD	Load the value from the EEPROM to the device
+5	SAVE	Save the value from the device to the EEPROM
+
+
+			INFO	LED		DHT22	
+------------------------------------
+LEDGoblin			x		
+
+
+			V(v)	I(mA)	P(W)
+LEDGoblin	5		20-50	0.1-0.25
+
