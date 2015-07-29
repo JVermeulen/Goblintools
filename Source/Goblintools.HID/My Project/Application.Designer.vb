@@ -32,7 +32,7 @@ Namespace My
         
         <Global.System.Diagnostics.DebuggerStepThroughAttribute()>  _
         Protected Overrides Sub OnCreateMainForm()
-            Me.MainForm = Global.Goblintools.Form1
+            Me.MainForm = Global.Goblintools.HID.Form1
         End Sub
     End Class
 End Namespace

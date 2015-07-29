@@ -1,0 +1,44 @@
+ID	MESSAGE
+------------
+0	INFO
+		0x00	2	Message (0x00)
+		0x02	1	Command (see command section)
+		0x03	1	Reserved
+		0x04-0xFF	Not used
+1	LED
+		0x00	2	Message (0x01)
+		0x02	1	Command (see command section)
+		0x03	1	Reserved
+		0x04	3	RGB value
+		0x07-0xFF	Not used
+2	BUTTON
+		0x00	2	Message (0x02)
+		0x02	1	Command (see command section)
+		0x03	1	Reserved
+		0x04	1	IsPressed (1=true,0=false)
+		0x05-0xFF	Not used
+3	PIEZO
+		0x00	2	Message(0x03)
+		0x02	1	Command (see command section)
+		0x03	1	Reserved
+		0x04-0xFF	Not used
+
+
+ID	COMMAND	DESCRIPTION
+-----------
+0	DISABLE	Disable the device
+1	ENABLE	Enable the device
+2	GET		Get the value from the device
+3	SET		Set the value to the device
+4	LOAD	Load the value from the EEPROM to the device
+5	SAVE	Save the value from the device to the EEPROM
+
+
+			INFO	LED		DHT22	
+------------------------------------
+LEDGoblet	x		x		
+
+
+			V(v)	I(mA)	P(W)
+LEDGoblet	5		20-50	0.1-0.25
+
