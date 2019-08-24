@@ -34,7 +34,7 @@ namespace Goblintools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GitHub\\JVermeulen\\Goblintools\\World of Warcraft")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GitHub\\JVermeulen\\Goblintools\\Data\\Test")]
         public string WowPath {
             get {
                 return ((string)(this["WowPath"]));

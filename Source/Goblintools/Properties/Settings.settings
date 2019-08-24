@@ -6,7 +6,7 @@
       <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\Data</Value>
     </Setting>
     <Setting Name="WowPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\World of Warcraft</Value>
+      <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\Data\Test</Value>
     </Setting>
     <Setting Name="PollInterval" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5</Value>

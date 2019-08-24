@@ -13,5 +13,8 @@
 */**/obj
 */**/.vs
 
-/Data/World of Warcraft/_classic_/WTF/Account
-/Data/World of Warcraft/_retail_/WTF/Account
+/Data/Test/_classic_/WTF/Account
+/Data/Test/_retail_/WTF/Account
+
+/Data/SavedVariables/**/*.*
+/Data/Results/**/*.*

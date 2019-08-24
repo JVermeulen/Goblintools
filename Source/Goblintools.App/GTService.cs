@@ -57,7 +57,7 @@ namespace Goblintools.App
             {
                 file.CopyToDestination(Properties.Settings.Default.InputPath);
 
-                var goblinDB = SavedVariableFileParser.Parse(file.File.FullName, file.TimestampEpoch);
+                var goblinDB = SavedVariableFileParser.Parse(file, file.TimestampEpoch);
 
                 Inbox.Send(goblinDB);
             }
@@ -70,7 +70,7 @@ namespace Goblintools.App
             }
             else if (value is List<SavedVariableFile> files)
             {
-                var list = files.Select(f => SavedVariableFileParser.Parse(f.File.FullName, f.TimestampEpoch)).OrderBy(g => g.Timestamp).ToList();
+                var list = files.Select(f => SavedVariableFileParser.Parse(f, f.TimestampEpoch)).OrderBy(g => g.Timestamp).ToList();
 
                 GTGoblinDB.CreateVideo(list, Properties.Settings.Default.OutputPath);
             }
