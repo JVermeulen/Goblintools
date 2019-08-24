@@ -3,19 +3,19 @@
   <Profiles />
   <Settings>
     <Setting Name="DataPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Source\GT\Data</Value>
+      <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\Data</Value>
     </Setting>
     <Setting Name="WowPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Source\GT</Value>
+      <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\World of Warcraft</Value>
     </Setting>
     <Setting Name="PollInterval" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="InputPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Source\GT\Input</Value>
+      <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\Data\SavedVariables</Value>
     </Setting>
     <Setting Name="OutputPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Source\GT\Output</Value>
+      <Value Profile="(Default)">C:\Source\GitHub\JVermeulen\Goblintools\Data\Results</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -25,7 +25,7 @@ namespace Goblintools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GT\\Data")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GitHub\\JVermeulen\\Goblintools\\Data")]
         public string DataPath {
             get {
                 return ((string)(this["DataPath"]));
@@ -34,7 +34,7 @@ namespace Goblintools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GT")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GitHub\\JVermeulen\\Goblintools\\World of Warcraft")]
         public string WowPath {
             get {
                 return ((string)(this["WowPath"]));
@@ -52,7 +52,7 @@ namespace Goblintools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GT\\Input")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GitHub\\JVermeulen\\Goblintools\\Data\\SavedVariables")]
         public string InputPath {
             get {
                 return ((string)(this["InputPath"]));
@@ -61,7 +61,7 @@ namespace Goblintools.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GT\\Output")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Source\\GitHub\\JVermeulen\\Goblintools\\Data\\Results")]
         public string OutputPath {
             get {
                 return ((string)(this["OutputPath"]));
