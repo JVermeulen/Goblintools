@@ -44,6 +44,7 @@
             this.cboCharacters = new System.Windows.Forms.ComboBox();
             this.Panel = new System.Windows.Forms.Panel();
             this.updIndex = new System.Windows.Forms.NumericUpDown();
+            this.mnuAutoStart = new System.Windows.Forms.ToolStripMenuItem();
             this.MainMenu.SuspendLayout();
             this.SystemTrayMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.updIndex)).BeginInit();
@@ -80,7 +81,8 @@
             // mnuSettings
             // 
             this.mnuSettings.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuWatchCharacters});
+            this.mnuWatchCharacters,
+            this.mnuAutoStart});
             this.mnuSettings.Name = "mnuSettings";
             this.mnuSettings.Size = new System.Drawing.Size(61, 20);
             this.mnuSettings.Text = "&Settings";
@@ -90,7 +92,7 @@
             this.mnuWatchCharacters.Checked = true;
             this.mnuWatchCharacters.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mnuWatchCharacters.Name = "mnuWatchCharacters";
-            this.mnuWatchCharacters.Size = new System.Drawing.Size(167, 22);
+            this.mnuWatchCharacters.Size = new System.Drawing.Size(180, 22);
             this.mnuWatchCharacters.Text = "Watch Characters";
             this.mnuWatchCharacters.Click += new System.EventHandler(this.mnuWatchClassicCharacters_Click);
             // 
@@ -167,6 +169,13 @@
             this.updIndex.TabIndex = 7;
             this.updIndex.ValueChanged += new System.EventHandler(this.updIndex_ValueChanged);
             // 
+            // mnuAutoStart
+            // 
+            this.mnuAutoStart.Name = "mnuAutoStart";
+            this.mnuAutoStart.Size = new System.Drawing.Size(180, 22);
+            this.mnuAutoStart.Text = "Auto Start";
+            this.mnuAutoStart.Click += new System.EventHandler(this.mnuAutoStart_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -181,7 +190,9 @@
             this.MainMenuStrip = this.MainMenu;
             this.MinimumSize = new System.Drawing.Size(1042, 802);
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
             this.Text = "Goblintools";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.MainMenu.ResumeLayout(false);
@@ -209,6 +220,7 @@
         private System.Windows.Forms.ComboBox cboCharacters;
         private System.Windows.Forms.Panel Panel;
         private System.Windows.Forms.NumericUpDown updIndex;
+        private System.Windows.Forms.ToolStripMenuItem mnuAutoStart;
     }
 }
 

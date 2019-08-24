@@ -1,4 +1,5 @@
 ﻿using Goblintools.Types;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +33,8 @@ namespace Goblintools.WinForms
 
             SavedVariable = new SavedVariableProcessor();
             SavedVariable.OnGoblinDBChanged.OnReceive.Subscribe(Work);
-            SavedVariable.Start();
+            SetSavedVariable();
+            SetAutoStart(true);
         }
 
         private void VerifySettings()
@@ -104,10 +107,46 @@ namespace Goblintools.WinForms
         {
             mnuWatchCharacters.Checked = !mnuWatchCharacters.Checked;
 
+            SetSavedVariable();
+        }
+
+        private void mnuAutoStart_Click(object sender, EventArgs e)
+        {
+            mnuAutoStart.Checked = !mnuAutoStart.Checked;
+
+            SetAutoStart();
+        }
+
+        private void SetSavedVariable()
+        {
             if (mnuWatchCharacters.Checked)
                 SavedVariable.Start();
             else
                 SavedVariable.Stop();
+        }
+
+        private void SetAutoStart(bool initialize = false)
+        {
+            try
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+                if (initialize)
+                {
+                    mnuAutoStart.Checked = (key.GetValue(Text) != null);
+                }
+                else
+                {
+                    if (mnuAutoStart.Checked)
+                        key.SetValue(Text, Application.ExecutablePath);
+                    else if (key.GetValue(Text) != null)
+                        key.DeleteValue(Text);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void cboAccounts_SelectedIndexChanged(object sender, EventArgs e)
