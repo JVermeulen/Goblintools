@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Goblintools.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Goblintools" Height="450" Width="800" Icon="pack://siteoforigin:,,,/Resources/goblintools.ico">
+    <Grid Loaded="Grid_Loaded">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Name="MnuExit" Header="_Exit" Click="MnuExit_Click"/>
+                </MenuItem>
+                <MenuItem Header="_Settings">
+                    <MenuItem Name="MnuWatchCharacters" Header="_WatchCharacters" IsCheckable="True" IsChecked="True" Click="MnuWatchCharacters_Click" />
+                    <MenuItem Name="MnuAutoStart" Header="_AutoStart" IsCheckable="True"  IsChecked="False" Click="MnuAutoStart_Click"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
     </Grid>
 </Window>
