@@ -1,0 +1,11 @@
+## Interface: 11302
+## Title: Goblintools.GPS
+## Version: 1.0
+## Author: Joost Vermeulen
+## URL: https://www.goblintools.nl/
+## Notes: This addon follows your location and other character information and saves them (on logoff) to the Saved Variables file.
+## DefaultState: enabled
+## SavedVariablesPerCharacter: GoblinDB
+
+core.lua
+main.lua
