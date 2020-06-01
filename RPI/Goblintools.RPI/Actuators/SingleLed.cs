@@ -1,9 +1,6 @@
 ﻿using Goblintools.RPI.Processing;
 using System;
-using System.Collections.Generic;
 using System.Device.Gpio;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Goblintools.RPI.Actuators
 {
@@ -17,22 +14,26 @@ namespace Goblintools.RPI.Actuators
 
         public bool LastValue { get; private set; }
 
-        public Observer<object> ValueChanged { get; set; }
+        public Observer<ActuatorValueChanged> ValueChanged { get; set; }
 
         public SingleLed(int pin, int interval = 1) : base(TimeSpan.FromSeconds(interval))
         {
             Pin = pin;
 
-            ValueChanged = new Observer<object>("LED");
+            ValueChanged = new Observer<ActuatorValueChanged>("LED");
         }
 
         public override void Start()
         {
+            Console.WriteLine($"{Name} started.");
+
             if (Controller == null)
             {
                 Controller = new GpioController();
 
                 Controller.OpenPin(Pin, PinMode.Output);
+
+                Console.WriteLine($"  Setting LED pin to {Pin}.");
             }
 
             base.Start();
@@ -40,6 +41,8 @@ namespace Goblintools.RPI.Actuators
 
         public override void Stop()
         {
+            Console.WriteLine($"{Name} stopped.");
+
             Controller?.Dispose();
             Controller = null;
 
@@ -54,17 +57,6 @@ namespace Goblintools.RPI.Actuators
                 SetLed(!LastValue);
             else if (value is bool turnOn)
                 SetLed(turnOn);
-            else if (value is string text)
-                Blink(50);
-        }
-
-        private void Blink(int delay)
-        {
-            SetLed(!LastValue);
-
-            Task.Delay(100);
-            
-            SetLed(!LastValue);
         }
 
         private void SetLed(bool turnOn)
@@ -75,7 +67,7 @@ namespace Goblintools.RPI.Actuators
 
                 Controller.Write(Pin, turnOn ? PinValue.High : PinValue.Low);
 
-                ValueChanged.Send(turnOn);
+                ValueChanged.Send(new ActuatorValueChanged(ValueChanged.Name, turnOn));
             }
         }
 
