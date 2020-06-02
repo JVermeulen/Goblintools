@@ -19,11 +19,15 @@ namespace Goblintools.RPI.Actuators
 
         public bool ShowTime { get; set; }
 
-        public HT16K33Display() : base(TimeSpan.FromSeconds(1))
+        public Observer<ActuatorValueChanged> ValueChanged { get; set; }
+
+        public HT16K33Display(string friendlyName) : base(friendlyName, TimeSpan.FromSeconds(1))
         {
             BusId = 1;
             DeviceAddress = Ht16k33.DefaultI2cAddress;
             Brightness = 1;
+
+            ValueChanged = new Observer<ActuatorValueChanged>(friendlyName);
         }
 
         public override void Start()
@@ -36,6 +40,7 @@ namespace Goblintools.RPI.Actuators
             if (Display == null)
                 Display = new Large4Digit7SegmentDisplay(Device) { Brightness = Brightness };
 
+            Display.Clear();
             Display.DisplayOn = true;
         }
 
@@ -77,6 +82,8 @@ namespace Goblintools.RPI.Actuators
                 LastValue = value;
 
                 Display?.Write(value);
+
+                ValueChanged.Send(new ActuatorValueChanged(FriendlyName, value, value));
             }
         }
 

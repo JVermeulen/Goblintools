@@ -15,31 +15,15 @@ namespace Goblintools.RPI.App
         {
             LoadConfiguration();
 
-            var pin = Convert.ToInt32(Configuration["Led:Pin"]);
+            var pin = Convert.ToByte(Configuration["Led:Pin"]);
 
-            using (var processor = new RpiProcessor())
-            using (var led = new SingleLed(pin))
-            using (var display = new HT16K33Display())
-            using (var sensor = new Bme280Sensor())
+            using (var processor = new RpiProcessor(pin))
             {
                 processor.Start();
-
-                led.ValueChanged.OnReceive.Subscribe(processor.Work);
-                led.Start();
-
-                display.ShowTime = true;
-                display.Start();
-
-                sensor.ValueChanged.OnReceive.Subscribe(processor.Work);
-                sensor.ValueChanged.OnReceive.Subscribe(led.Work);
-                sensor.Start();
 
                 Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs eventArgs) =>
                 {
                     processor.Dispose();
-                    led.Dispose();
-                    display.Dispose();
-                    sensor.Dispose();
                 };
 
                 Task.Delay(-1).Wait();

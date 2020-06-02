@@ -17,9 +17,10 @@ namespace Goblintools.RPI.Processing
             Interval = interval;
         }
 
-        public void Start(IScheduler scheduler)
+        public void Start(IScheduler scheduler, bool startImmediately = false)
         {
-            OnNext(Value);
+            if (startImmediately)
+                OnNext(Value);
 
             Cancellation = new CancellationTokenSource();
 

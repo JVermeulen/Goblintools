@@ -8,66 +8,111 @@ namespace Goblintools.RPI.Actuators
     {
         private GpioController Controller { get; set; }
 
-        public int Pin { get; set; }
+        public byte? RedPin { get; private set; }
+        public byte? GreenPin { get; private set; }
+        public byte? BluePin { get; private set; }
 
-        public bool BlinkLed { get; set; }
+        public Color Value { get; private set; }
+        public Color ValueInversed => Value.CreateInversed();
 
-        public bool LastValue { get; private set; }
+        public SingleLedMode Mode { get; set; }
 
         public Observer<ActuatorValueChanged> ValueChanged { get; set; }
 
-        public SingleLed(int pin, int interval = 1) : base(TimeSpan.FromSeconds(interval))
+        public SingleLed(string friendlyName, byte? redPin = null, byte? greenPin = null, byte? bluePin = null, int interval = 1) : base(friendlyName, TimeSpan.FromSeconds(interval))
         {
-            Pin = pin;
+            RedPin = redPin;
+            GreenPin = greenPin;
+            BluePin = bluePin;
 
-            ValueChanged = new Observer<ActuatorValueChanged>("LED");
+            Value = new Color(byte.MaxValue);
+
+            ValueChanged = new Observer<ActuatorValueChanged>(friendlyName);
         }
 
         public override void Start()
         {
-            Console.WriteLine($"{Name} started.");
+            base.Start();
 
             if (Controller == null)
             {
                 Controller = new GpioController();
+                
+                if (RedPin.HasValue)
+                    Controller.OpenPin(RedPin.Value, PinMode.Output);
 
-                Controller.OpenPin(Pin, PinMode.Output);
+                if (GreenPin.HasValue)
+                    Controller.OpenPin(GreenPin.Value, PinMode.Output);
 
-                Console.WriteLine($"  Setting LED pin to {Pin}.");
+                if (BluePin.HasValue)
+                    Controller.OpenPin(BluePin.Value, PinMode.Output);
+
+                WriteToConsole($"  Setting GPIO pins of {FriendlyName} to red={RedPin}, green={GreenPin}, blue={BluePin}.", ConsoleColor.Yellow);
             }
-
-            base.Start();
         }
 
         public override void Stop()
         {
-            Console.WriteLine($"{Name} stopped.");
-
-            Controller?.Dispose();
-            Controller = null;
-
             base.Stop();
+
+            if (Controller != null)
+            {
+                if (RedPin.HasValue)
+                    Controller.ClosePin(RedPin.Value);
+
+                if (GreenPin.HasValue)
+                    Controller.ClosePin(GreenPin.Value);
+
+                if (BluePin.HasValue)
+                    Controller.ClosePin(BluePin.Value);
+
+                Controller.Dispose();
+                Controller = null;
+            }
         }
 
         public override void Work(object value)
         {
             base.Work(value);
 
-            if (value is Heartbeat heartbeat && BlinkLed)
-                SetLed(!LastValue);
-            else if (value is bool turnOn)
-                SetLed(turnOn);
+            if (value is Heartbeat heartbeat)
+                OnHeartbeat(heartbeat);
+            else if (value is SingleLedMode mode)
+                SetMode(mode);
         }
 
-        private void SetLed(bool turnOn)
+        private void OnHeartbeat(Heartbeat heartbeat)
         {
-            if (LastValue != turnOn)
+            if (Mode == SingleLedMode.Blink)
+                SetColor(ValueInversed);
+        }
+
+        private void SetMode(SingleLedMode mode)
+        {
+            Mode = mode;
+
+            if (Mode == SingleLedMode.On)
+                SetColor(new Color(byte.MaxValue));
+            else if (mode == SingleLedMode.Off)
+                SetColor(new Color(byte.MinValue));
+        }
+
+        private void SetColor(Color value)
+        {
+            if (Value != value)
             {
-                LastValue = turnOn;
+                Value = value;
 
-                Controller.Write(Pin, turnOn ? PinValue.High : PinValue.Low);
+                if (RedPin.HasValue)
+                    Controller.Write(RedPin.Value, value.Brightness > 0 && Value.Red > 0 ? PinValue.High : PinValue.Low);
 
-                ValueChanged.Send(new ActuatorValueChanged(ValueChanged.Name, turnOn));
+                if (GreenPin.HasValue)
+                    Controller.Write(GreenPin.Value, value.Brightness > 0 && Value.Green > 0 ? PinValue.High : PinValue.Low);
+
+                if (BluePin.HasValue)
+                    Controller.Write(BluePin.Value, value.Brightness > 0 && Value.Blue > 0 ? PinValue.High : PinValue.Low);
+                
+                ValueChanged.Send(new ActuatorValueChanged(FriendlyName, value, value.Brightness > 0 ? "on" : "off"));
             }
         }
 

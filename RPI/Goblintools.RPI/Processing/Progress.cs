@@ -55,9 +55,9 @@ namespace Goblintools.RPI.Processing
             var fps = Current / duration.TotalSeconds;
 
             if (Current < Total)
-                return $"{Percentage.ToString("P1")} ({fps.ToString("F1")} fps)";
+                return $"{Percentage.ToString("P1")} ({fps.ToString("F1")})";
             else
-                return $"{Message}: {duration.ToString(@"hh\:mm\:ss")} ({fps.ToString("F2")} fps)";
+                return $"{Message}: {duration.ToString(@"hh\:mm\:ss")} ({fps.ToString("F2")})";
         }
 
         public void Dispose()

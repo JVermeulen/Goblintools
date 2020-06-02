@@ -20,12 +20,12 @@ namespace Goblintools.RPI.Sensors
 
         public Observer<object> ValueChanged { get; set; }
 
-        public Bme280Sensor() : base(TimeSpan.FromSeconds(15))
+        public Bme280Sensor(string friendlyName, int interval = 15) : base(friendlyName, TimeSpan.FromSeconds(interval))
         {
             BusId = 1;
             DeviceAddress = Bme280.DefaultI2cAddress;
 
-            ValueChanged = new Observer<object>("BME280");
+            ValueChanged = new Observer<object>(friendlyName);
         }
 
         public override void Start()
@@ -68,7 +68,7 @@ namespace Goblintools.RPI.Sensors
         {
             if (!base.IsEnabled)
                 throw new ApplicationException("Unable to read. Sensor has not started yet.");
-            
+
             // set higher sampling
             Sensor.TemperatureSampling = Sampling.LowPower;
             Sensor.PressureSampling = Sampling.UltraHighResolution;
@@ -80,7 +80,7 @@ namespace Goblintools.RPI.Sensors
             // wait for measurement to be performed
             var measurementTime = Sensor.GetMeasurementDuration();
             Thread.Sleep(measurementTime);
-            
+
             if (Sensor.TryReadTemperature(out var temperature))
                 ValueChanged.Send(temperature);
 
@@ -90,7 +90,7 @@ namespace Goblintools.RPI.Sensors
             if (Sensor.TryReadHumidity(out var humidity))
                 ValueChanged.Send(humidity);
 
-            ValueChanged.Send("");
+            //ValueChanged.Send("");
 
             Sensor.TemperatureSampling = Sampling.UltraHighResolution;
             Sensor.PressureSampling = Sampling.UltraLowPower;
