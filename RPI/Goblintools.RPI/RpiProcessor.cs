@@ -15,9 +15,9 @@ namespace Goblintools.RPI
         public Bme280Sensor Sensor { get; private set; }
 
         private int RotateIndex { get; set; }
-        private Dictionary<string, string> RotateText { get; set; }
+        public Dictionary<string, string> RotateText { get; set; }
 
-        public RpiProcessor(byte pin, int interval = 5) : base("Main Controller", TimeSpan.FromSeconds(interval))
+        public RpiProcessor(byte pin = 24, int interval = 5) : base("Main Controller", TimeSpan.FromSeconds(interval))
         {
             RotateText = new Dictionary<string, string>();
 

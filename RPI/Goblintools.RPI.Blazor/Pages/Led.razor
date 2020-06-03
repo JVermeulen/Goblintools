@@ -1,0 +1,19 @@
+﻿@page "/led"
+@inject HttpClient Http
+
+<h1>Counter</h1>
+
+<p>Current value: @Value</p>
+
+<button class="btn btn-primary" @onclick="Toggle">Click me</button>
+
+@code {
+    private bool Value { get; set; }
+
+    private async Task Toggle()
+    {
+        Value = !Value;
+
+        await Http.SendJsonAsync(HttpMethod.Post, "Gpgio", Value);
+    }
+}
