@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Goblintools.RPI.Processing
 {
-    public class ActuatorValueChanged
+    public class Observation
     {
         public DateTime Timestamp { get; set; }
 
@@ -10,7 +12,7 @@ namespace Goblintools.RPI.Processing
         public object Value { get; set; }
         public string Text { get; set; }
 
-        public ActuatorValueChanged(string key, object value, string text = null)
+        public Observation(string key, object value, string text = null)
         {
             Timestamp = DateTime.Now;
 

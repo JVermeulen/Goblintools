@@ -3,59 +3,30 @@ using Iot.Device.Bmxx80;
 using Iot.Device.Bmxx80.FilteringMode;
 using Iot.Device.Bmxx80.PowerMode;
 using System;
-using System.Device.I2c;
 using System.Threading;
 
 namespace Goblintools.RPI.Sensors
 {
-    public class Bme280Sensor : Processor, IDisposable
+    public class Bme280Sensor : I2cSensor, IDisposable
     {
         //https://www.adafruit.com/product/2652
-        private Bme280 Sensor { get; set; }
-        private I2cConnectionSettings Settings { get; set; }
-        private I2cDevice Device { get; set; }
+        private Bme280 Product { get; set; }
 
-        public int BusId { get; set; }
-        public int DeviceAddress { get; set; }
+        public Observation Temperature { get; private set; }
+        public Observation Pressure { get; private set; }
+        public Observation Humidity { get; private set; }
 
-        public Observer<object> ValueChanged { get; set; }
-
-        public Bme280Sensor(string friendlyName, int interval = 15) : base(friendlyName, TimeSpan.FromSeconds(interval))
+        public Bme280Sensor(string friendlyName) : base(friendlyName, Bme280.DefaultI2cAddress)
         {
-            BusId = 1;
-            DeviceAddress = Bme280.DefaultI2cAddress;
-
-            ValueChanged = new Observer<object>(friendlyName);
+            Product = new Bme280(Device);
+            Product.SetPowerMode(Bmx280PowerMode.Forced);
         }
 
         public override void Start()
         {
-            if (Settings == null)
-                Settings = new I2cConnectionSettings(BusId, DeviceAddress);
-
-            if (Device == null)
-                Device = I2cDevice.Create(Settings);
-
-            if (Sensor == null)
-            {
-                Sensor = new Bme280(Device);
-                Sensor.SetPowerMode(Bmx280PowerMode.Forced);
-            }
-
             base.Start();
-        }
 
-        public override void Stop()
-        {
-            Sensor?.Dispose();
-            Sensor = null;
-
-            Device?.Dispose();
-            Device = null;
-
-            Settings = null;
-
-            base.Stop();
+            Read();
         }
 
         public override void Work(object value)
@@ -66,43 +37,46 @@ namespace Goblintools.RPI.Sensors
 
         public void Read()
         {
-            if (!base.IsEnabled)
+            if (!base.IsRunning)
                 throw new ApplicationException("Unable to read. Sensor has not started yet.");
 
             // set higher sampling
-            Sensor.TemperatureSampling = Sampling.LowPower;
-            Sensor.PressureSampling = Sampling.UltraHighResolution;
-            Sensor.HumiditySampling = Sampling.Standard;
+            Product.TemperatureSampling = Sampling.LowPower;
+            Product.PressureSampling = Sampling.UltraHighResolution;
+            Product.HumiditySampling = Sampling.Standard;
 
             // set mode forced so device sleeps after read
-            Sensor.SetPowerMode(Bmx280PowerMode.Forced);
+            Product.SetPowerMode(Bmx280PowerMode.Forced);
 
             // wait for measurement to be performed
-            var measurementTime = Sensor.GetMeasurementDuration();
+            var measurementTime = Product.GetMeasurementDuration();
             Thread.Sleep(measurementTime);
 
-            if (Sensor.TryReadTemperature(out var temperature))
-                ValueChanged.Send(temperature);
+            if (Product.TryReadTemperature(out var temperature))
+            {
+                Temperature = new Observation("Temperature", temperature.Celsius, $"{Math.Round(temperature.Celsius, 2)}°C");
 
-            if (Sensor.TryReadPressure(out var pressure))
-                ValueChanged.Send(pressure);
+                ValueChanged.Send(Temperature);
+            }
 
-            if (Sensor.TryReadHumidity(out var humidity))
-                ValueChanged.Send(humidity);
+            if (Product.TryReadPressure(out var pressure))
+            {
+                Pressure = new Observation("Pressure", pressure.Hectopascal, $"{Math.Round(pressure.Hectopascal, 0)}hPa");
 
-            //ValueChanged.Send("");
+                ValueChanged.Send(Pressure);
+            }
 
-            Sensor.TemperatureSampling = Sampling.UltraHighResolution;
-            Sensor.PressureSampling = Sampling.UltraLowPower;
-            Sensor.HumiditySampling = Sampling.UltraLowPower;
-            Sensor.FilterMode = Bmx280FilteringMode.X2;
-        }
+            if (Product.TryReadHumidity(out var humidity))
+            {
+                Humidity = new Observation("Humidity", humidity, $"{Math.Round(humidity, 1)}%");
 
-        public new void Dispose()
-        {
-            Stop();
+                ValueChanged.Send(Humidity);
+            }
 
-            base.Dispose();
+            Product.TemperatureSampling = Sampling.UltraHighResolution;
+            Product.PressureSampling = Sampling.UltraLowPower;
+            Product.HumiditySampling = Sampling.UltraLowPower;
+            Product.FilterMode = Bmx280FilteringMode.X2;
         }
     }
 }

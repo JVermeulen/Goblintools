@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goblintools.RPI.App", "..\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goblintools.RPI.Blazor", "..\Goblintools.RPI.Blazor\Goblintools.RPI.Blazor.csproj", "{10082E79-2E57-462E-B61A-6DAC82E014DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goblintools.RPI.Server", "..\Goblintools.RPI.Server\Goblintools.RPI.Server.csproj", "{57024C4B-1A9F-41CD-A855-11D8EE1ACF31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{10082E79-2E57-462E-B61A-6DAC82E014DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10082E79-2E57-462E-B61A-6DAC82E014DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10082E79-2E57-462E-B61A-6DAC82E014DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57024C4B-1A9F-41CD-A855-11D8EE1ACF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57024C4B-1A9F-41CD-A855-11D8EE1ACF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57024C4B-1A9F-41CD-A855-11D8EE1ACF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57024C4B-1A9F-41CD-A855-11D8EE1ACF31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

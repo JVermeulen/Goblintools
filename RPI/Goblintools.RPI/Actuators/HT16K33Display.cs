@@ -19,7 +19,7 @@ namespace Goblintools.RPI.Actuators
 
         public bool ShowTime { get; set; }
 
-        public Observer<ActuatorValueChanged> ValueChanged { get; set; }
+        public Observer<Observation> ValueChanged { get; set; }
 
         public HT16K33Display(string friendlyName) : base(friendlyName, TimeSpan.FromSeconds(1))
         {
@@ -27,7 +27,7 @@ namespace Goblintools.RPI.Actuators
             DeviceAddress = Ht16k33.DefaultI2cAddress;
             Brightness = 1;
 
-            ValueChanged = new Observer<ActuatorValueChanged>(friendlyName);
+            ValueChanged = new Observer<Observation>(friendlyName);
         }
 
         public override void Start()
@@ -83,7 +83,7 @@ namespace Goblintools.RPI.Actuators
 
                 Display?.Write(value);
 
-                ValueChanged.Send(new ActuatorValueChanged(FriendlyName, value, value));
+                ValueChanged.Send(new Observation(FriendlyName, value, value));
             }
         }
 

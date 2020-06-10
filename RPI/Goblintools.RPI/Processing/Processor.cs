@@ -15,7 +15,7 @@ namespace Goblintools.RPI.Processing
 
         public Inbox<object> Inbox { get; private set; }
 
-        public bool IsEnabled => StartedAt.HasValue && !StoppedAt.HasValue;
+        public bool IsRunning => StartedAt.HasValue && !StoppedAt.HasValue;
         public DateTime? StartedAt { get; private set; }
         public DateTime? StoppedAt { get; private set; }
 

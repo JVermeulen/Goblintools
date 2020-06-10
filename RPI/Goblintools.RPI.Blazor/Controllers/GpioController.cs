@@ -19,7 +19,7 @@ namespace Goblintools.RPI.Blazor.Controllers
         {
             RPI = rpi;
 
-            if (!rpi.IsEnabled)
+            if (!rpi.IsRunning)
                 rpi.Start();
         }
 

@@ -10,9 +10,7 @@ namespace Goblintools.RPI
 {
     public class RpiProcessor : Processor, IDisposable
     {
-        public SingleLed LED { get; private set; }
         public HT16K33Display Display { get; private set; }
-        public Bme280Sensor Sensor { get; private set; }
 
         private int RotateIndex { get; set; }
         public Dictionary<string, string> RotateText { get; set; }
@@ -21,24 +19,15 @@ namespace Goblintools.RPI
         {
             RotateText = new Dictionary<string, string>();
 
-            LED = new SingleLed("Red LED", pin, null, null);
-            //LED.Inbox.Send(SingleLedMode.Blink);
-            LED.ValueChanged.OnReceive.Subscribe(Work);
-
             Display = new HT16K33Display("7-Segment");
             Display.ValueChanged.OnReceive.Subscribe(Work);
-
-            Sensor = new Bme280Sensor("BME280");
-            Sensor.ValueChanged.OnReceive.Subscribe(Work);
         }
 
         public override void Start()
         {
             base.Start();
 
-            LED.Start();
             Display.Start();
-            Sensor.Start();
 
             Console.WriteLine();
         }
@@ -47,9 +36,7 @@ namespace Goblintools.RPI
         {
             Console.WriteLine();
 
-            LED.Stop();
             Display.Stop();
-            Sensor.Stop();
 
             base.Stop();
         }
@@ -58,8 +45,8 @@ namespace Goblintools.RPI
         {
             if (value is Heartbeat heartbeat)
                 OnHeartbeat(heartbeat);
-            else if (value is ActuatorValueChanged actuatorValueChanged)
-                WriteToConsole($"{actuatorValueChanged}", ConsoleColor.Blue);
+            else if (value is Observation valueChangedMessage)
+                WriteToConsole($"{valueChangedMessage}", ConsoleColor.Blue);
             else if (value is string text)
                 WriteToConsole($"{text}", ConsoleColor.White);
             else if (value is Temperature temperature)
@@ -117,9 +104,7 @@ namespace Goblintools.RPI
         {
             Stop();
 
-            LED?.Dispose();
             Display?.Dispose();
-            Sensor?.Dispose();
 
             base.Dispose();
         }
