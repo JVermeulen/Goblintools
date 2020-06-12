@@ -1,5 +1,4 @@
 ﻿using System;
-using Goblintools.RPI.Actuators;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Goblintools.RPI.Server.Controllers
@@ -9,6 +8,8 @@ namespace Goblintools.RPI.Server.Controllers
     public class DisplayController : Controller
     {
         private readonly RpiController Controller;
+
+        private const string EmptyString = "";
 
         public DisplayController(RpiController controller)
         {
@@ -22,9 +23,12 @@ namespace Goblintools.RPI.Server.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get(string value = default)
+        public ActionResult Get(string value = EmptyString)
         {
-            return new JsonResult(null);
+            if (value != EmptyString)
+                Controller.SevenSegment.SetValue(value);
+
+            return new JsonResult(Controller.SevenSegment.SevenSegment);
         }
     }
 }

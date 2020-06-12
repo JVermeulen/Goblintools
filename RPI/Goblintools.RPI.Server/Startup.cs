@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Device.Gpio;
 using System.Linq;
 using System.Threading.Tasks;
-using Goblintools.RPI.Actuators;
-using Goblintools.RPI.Sensors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Goblintools.RPI.Actuators;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -37,10 +36,10 @@ namespace Goblintools.RPI.Blazor.Controllers
         [HttpPost]
         public void Post([FromBody] bool toggle)
         {
-            if (toggle)
-                RPI.LED.Inbox.Send(SingleLedMode.On);
-            else
-                RPI.LED.Inbox.Send(SingleLedMode.Off);
+            //if (toggle)
+            //    RPI.LED.Inbox.Send(SingleLedMode.On);
+            //else
+            //    RPI.LED.Inbox.Send(SingleLedMode.Off);
         }
     }
 }

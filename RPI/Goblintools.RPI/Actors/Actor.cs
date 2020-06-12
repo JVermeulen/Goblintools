@@ -7,7 +7,7 @@ namespace Goblintools.RPI.Actors
     {
         public Observer<Observation> ValueChanged { get; set; }
 
-        public Actor(string friendlyName, int interval) : base(friendlyName, TimeSpan.FromSeconds(interval))
+        public Actor(string friendlyName, TimeSpan interval) : base(friendlyName, interval)
         {
             ValueChanged = new Observer<Observation>(friendlyName);
         }

@@ -24,11 +24,11 @@ namespace Goblintools.RPI.Server.Controllers
         public ActionResult Get(bool? value = default)
         {
             if (value.HasValue)
-                Controller.LED.Value = value.Value;
+                Controller.RedLED.Value = value.Value;
 
             var result = new
             {
-                led = Controller.LED.Value,
+                led = Controller.RedLED.LED,
             };
 
             return new JsonResult(result);

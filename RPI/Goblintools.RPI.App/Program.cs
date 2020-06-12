@@ -1,6 +1,4 @@
-﻿using Goblintools.RPI.Actuators;
-using Goblintools.RPI.Sensors;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;

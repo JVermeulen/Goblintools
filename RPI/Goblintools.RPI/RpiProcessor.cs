@@ -1,5 +1,4 @@
-﻿using Goblintools.RPI.Actuators;
-using Goblintools.RPI.Processing;
+﻿using Goblintools.RPI.Processing;
 using Goblintools.RPI.Sensors;
 using Iot.Units;
 using System;
@@ -10,7 +9,6 @@ namespace Goblintools.RPI
 {
     public class RpiProcessor : Processor, IDisposable
     {
-        public HT16K33Display Display { get; private set; }
 
         private int RotateIndex { get; set; }
         public Dictionary<string, string> RotateText { get; set; }
@@ -18,16 +16,11 @@ namespace Goblintools.RPI
         public RpiProcessor(byte pin = 24, int interval = 5) : base("Main Controller", TimeSpan.FromSeconds(interval))
         {
             RotateText = new Dictionary<string, string>();
-
-            Display = new HT16K33Display("7-Segment");
-            Display.ValueChanged.OnReceive.Subscribe(Work);
         }
 
         public override void Start()
         {
             base.Start();
-
-            Display.Start();
 
             Console.WriteLine();
         }
@@ -35,8 +28,6 @@ namespace Goblintools.RPI
         public override void Stop()
         {
             Console.WriteLine();
-
-            Display.Stop();
 
             base.Stop();
         }
@@ -67,8 +58,6 @@ namespace Goblintools.RPI
 
             if (RotateIndex >= RotateText.Count)
                 RotateIndex = 0;
-
-            Display.Inbox.Send(RotateText.Values.ElementAt(RotateIndex));
         }
 
         public void OnTemperatureReceived(Temperature value)
@@ -103,8 +92,6 @@ namespace Goblintools.RPI
         public new void Dispose()
         {
             Stop();
-
-            Display?.Dispose();
 
             base.Dispose();
         }

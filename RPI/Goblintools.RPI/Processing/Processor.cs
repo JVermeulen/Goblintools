@@ -36,7 +36,7 @@ namespace Goblintools.RPI.Processing
 
         public virtual void Start()
         {
-            WriteToConsole($"{FriendlyName} started.", ConsoleColor.Yellow);
+            WriteToConsole($"{FriendlyName} ({Code}) started.", ConsoleColor.Yellow);
 
             StartedAt = DateTime.Now;
             StoppedAt = null;

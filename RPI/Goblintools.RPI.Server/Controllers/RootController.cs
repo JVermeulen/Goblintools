@@ -19,14 +19,21 @@ namespace Goblintools.RPI.Server.Controllers
         {
             var result = new
             {
-                temperature = Controller.BME280.Temperature,
-                pressure = Controller.BME280.Pressure,
-                humidity = Controller.BME280.Humidity,
-                led = Controller.LED.Value,
+                sensors = new
+                {
+                    Controller.BME280.Temperature,
+                    Controller.BME280.Pressure,
+                    Controller.BME280.Humidity,
+                    Controller.BME280.Altitude,
+                },
+                actors = new
+                {
+                    Controller.RedLED.LED,
+                    Controller.SevenSegment.SevenSegment
+                },
             };
 
             return new JsonResult(result);
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Goblintools.RPI.Processing;
+using System;
 using System.Device.Gpio;
 
 namespace Goblintools.RPI.Actors
@@ -9,6 +10,8 @@ namespace Goblintools.RPI.Actors
 
         public int Pin { get; private set; }
 
+        public override string Code => "GPIO";
+
         public bool Value
         {
             get
@@ -18,10 +21,12 @@ namespace Goblintools.RPI.Actors
             set
             {
                 Controller?.Write(Pin, value ? PinValue.High : PinValue.Low);
+
+                Read();
             }
         }
 
-        public GpioActor(string friendlyName, int pin, int interval = 15) : base(friendlyName, interval)
+        public GpioActor(string friendlyName, int pin, TimeSpan interval) : base(friendlyName, interval)
         {
             Pin = pin;
         }
@@ -35,6 +40,8 @@ namespace Goblintools.RPI.Actors
                 Controller = new GpioController();
 
                 Controller.OpenPin(Pin, PinMode.Output);
+
+                Read();
             }
         }
 
@@ -44,6 +51,13 @@ namespace Goblintools.RPI.Actors
 
             if (Controller != null && Controller.IsPinOpen(Pin))
                 Controller.ClosePin(Pin);
+        }
+
+        public void Read()
+        {
+            var observation = new Observation(false, "Led", Value, Value ? "On" : "Off", Code);
+
+            ValueChanged.Send(observation);
         }
 
         public new void Dispose()
