@@ -33,7 +33,7 @@ namespace Goblintools.RPI.Server.Controllers
                 },
             };
 
-            return new JsonResult(result);
+            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
         }
     }
 }

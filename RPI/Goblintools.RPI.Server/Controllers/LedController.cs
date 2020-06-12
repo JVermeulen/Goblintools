@@ -28,10 +28,13 @@ namespace Goblintools.RPI.Server.Controllers
 
             var result = new
             {
-                led = Controller.RedLED.LED,
+                actors = new
+                {
+                    Controller.RedLED.LED
+                }
             };
 
-            return new JsonResult(result);
+            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
         }
     }
 }

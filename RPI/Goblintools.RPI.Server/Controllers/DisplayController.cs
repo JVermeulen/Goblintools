@@ -28,7 +28,15 @@ namespace Goblintools.RPI.Server.Controllers
             if (value != EmptyString)
                 Controller.SevenSegment.SetValue(value);
 
-            return new JsonResult(Controller.SevenSegment.SevenSegment);
+            var result = new
+            {
+                actors = new
+                {
+                    Controller.SevenSegment.SevenSegment
+                }
+            };
+
+            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
         }
     }
 }

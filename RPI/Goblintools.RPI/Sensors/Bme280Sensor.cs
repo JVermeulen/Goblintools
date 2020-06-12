@@ -77,7 +77,7 @@ namespace Goblintools.RPI.Sensors
                 ValueChanged.Send(Humidity);
             }
 
-            if (Product.TryReadAltitude(Iot.Units.Pressure.FromHectopascal(1013.25), out double altitude))
+            if (Product.TryReadAltitude(Iot.Units.Pressure.FromHectopascal(1015), out double altitude))
             {
                 Altitude = new Observation(true, "Altitude", Math.Round(altitude, 5), $"{Math.Round(altitude, 0)}m", Code);
 

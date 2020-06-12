@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Text.Json;
-using Goblintools.RPI.Sensors;
-using Iot.Units;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Goblintools.RPI.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SensorController
+    public class TemperatureController
     {
         private readonly RpiController Controller;
 
-        public SensorController(RpiController controller)
+        public TemperatureController(RpiController controller)
         {
             Controller = controller;
         }
@@ -25,9 +22,6 @@ namespace Goblintools.RPI.Server.Controllers
                 sensors = new
                 {
                     Controller.BME280.Temperature,
-                    Controller.BME280.Pressure,
-                    Controller.BME280.Humidity,
-                    Controller.BME280.Altitude,
                 }
             };
 

@@ -4,11 +4,14 @@ using Goblintools.RPI.Sensors;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace Goblintools.RPI
 {
     public class RpiController : Processor
     {
+        public JsonSerializerOptions DefaultJsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
+
         public LedActor RedLED { get; set; }
         public SevenSegmentActor SevenSegment { get; set; }
         public Bme280Sensor BME280 { get; set; }
