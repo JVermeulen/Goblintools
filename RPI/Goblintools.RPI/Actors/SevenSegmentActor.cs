@@ -24,6 +24,8 @@ namespace Goblintools.RPI.Actors
         {
             Values = new Dictionary<string, string>();
 
+            SevenSegment = new Observation(Category, FriendlyName, null, string.Empty, Code);
+            
             ValueChanged.OnReceive.Subscribe(o => SevenSegment = o);
 
             Brightness = 1;

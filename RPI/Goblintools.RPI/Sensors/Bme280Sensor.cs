@@ -63,7 +63,7 @@ namespace Goblintools.RPI.Sensors
 
                 if (Product.TryReadTemperature(out var temperature))
                 {
-                    Temperature = new Observation(Category, "Temperature", Math.Round(temperature.Celsius, 5), $"{Math.Round(temperature.Celsius, 1)}°C", Code);
+                    Temperature = new Observation(Category, "Temperature", Math.Round(temperature.Celsius, 5), $"{Math.Round(temperature.Celsius, 0)}°C", Code);
 
                     ValueChanged.Send(Temperature);
                 }
@@ -77,7 +77,7 @@ namespace Goblintools.RPI.Sensors
 
                 if (Product.TryReadHumidity(out var humidity))
                 {
-                    Humidity = new Observation(Category, "Humidity", Math.Round(humidity, 5), $"{Math.Round(humidity, 1)}%", Code);
+                    Humidity = new Observation(Category, "Humidity", Math.Round(humidity, 5), $"{Math.Round(humidity, 0)}%", Code);
 
                     ValueChanged.Send(Humidity);
                 }
@@ -93,6 +93,13 @@ namespace Goblintools.RPI.Sensors
                 Product.PressureSampling = Sampling.UltraLowPower;
                 Product.HumiditySampling = Sampling.UltraLowPower;
                 Product.FilterMode = Bmx280FilteringMode.Off;
+            }
+            else
+            {
+                Temperature = new Observation(Category, "Temperature", null, string.Empty, Code);
+                Pressure = new Observation(Category, "Pressure", null, string.Empty, Code);
+                Humidity = new Observation(Category, "Humidity", null, string.Empty, Code);
+                Altitude = new Observation(Category, "Altitude", null, string.Empty, Code);
             }
         }
     }

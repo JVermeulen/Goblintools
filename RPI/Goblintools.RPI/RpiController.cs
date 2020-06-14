@@ -4,6 +4,7 @@ using Goblintools.RPI.Processing;
 using Goblintools.RPI.Sensors;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 
@@ -51,7 +52,7 @@ namespace Goblintools.RPI
         {
             if (Generator != null && observation.DeviceName == Generator.Code)
                 SevenSegment.SetValue(observation.Value.ToString());
-            else  if (observation.Category == "Sensor")
+            else if (observation.Category == "Sensor")
                 WriteToConsole($"Sensor value: {observation}", ConsoleColor.Blue);
             else if (observation.Category == "Actor")
                 WriteToConsole($"Actor value: {observation}", ConsoleColor.Green);
@@ -61,9 +62,26 @@ namespace Goblintools.RPI
 
         private void OnHeartbeat(Heartbeat heartbeat)
         {
-            var value = Math.Round((double)BME280.Temperature.Value, 0);
+            if (BME280.Temperature != null && BME280.Temperature.Value != null)
+            {
+                var value = Math.Round((double)BME280.Temperature.Value, 0);
 
-            SevenSegment.SetValue($"{value}°C");
+                SevenSegment.SetValue($"{value}°C");
+            }
+        }
+
+        public List<Observation> GetObservations()
+        {
+            var observations = new List<Observation>()
+            {
+                 BME280.Temperature,
+                 BME280.Pressure,
+                 BME280.Humidity,
+                 RedLED.LED,
+                 SevenSegment.SevenSegment,
+            };
+
+            return observations.Where(o => o != null).ToList();
         }
 
         public new void Dispose()

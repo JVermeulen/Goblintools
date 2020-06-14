@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Goblintools.RPI.Processing
 {
@@ -14,6 +12,8 @@ namespace Goblintools.RPI.Processing
         public object Value { get; set; }
         public string Text { get; set; }
 
+        public string[] Keywords => new string[] { Category.ToLower(), MachineName.ToLower(), DeviceName.ToLower(), Name.ToLower() };
+        
         public Observation(string category, string name, object value, string text, string deviceName)
         {
             Category = category;
