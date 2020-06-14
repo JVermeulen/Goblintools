@@ -7,16 +7,16 @@ namespace Goblintools.RPI.Processing
     public class Observation
     {
         public DateTime Timestamp { get; set; }
-        public bool IsSensor { get; set; }
         public string MachineName { get; set; }
         public string DeviceName { get; set; }
+        public string Category { get; set; }
         public string Name { get; set; }
         public object Value { get; set; }
         public string Text { get; set; }
 
-        public Observation(bool isSensor, string name, object value, string text, string deviceName)
+        public Observation(string category, string name, object value, string text, string deviceName)
         {
-            IsSensor = isSensor;
+            Category = category;
             Timestamp = DateTime.Now;
             MachineName = Environment.MachineName;
 

@@ -28,7 +28,8 @@ namespace Goblintools.RPI.Actors
 
             Brightness = 1;
 
-            Display = new Large4Digit7SegmentDisplay(Device) { Brightness = Brightness };
+            if (Device != null)
+                Display = new Large4Digit7SegmentDisplay(Device) { Brightness = Brightness };
 
             SetValue(null);
         }
@@ -66,9 +67,12 @@ namespace Goblintools.RPI.Actors
 
         public void SetValue(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                value = null;
+
             bool hasChanged = (SevenSegment == null || SevenSegment.Value == null || value == null) || !((string)SevenSegment.Value).Equals(value);
 
-            if (hasChanged)
+            if (Display != null && hasChanged)
             {
                 if (value != null)
                 {
@@ -85,7 +89,7 @@ namespace Goblintools.RPI.Actors
                         Display.DisplayOn = false;
                 }
 
-                SevenSegment = new Observation(false, "SevenSegment", value, value, Code);
+                SevenSegment = new Observation(Category, "SevenSegment", value, value, Code);
 
                 ValueChanged.Send(SevenSegment);
             }
@@ -93,9 +97,9 @@ namespace Goblintools.RPI.Actors
 
         public new void Dispose()
         {
-            base.Dispose();
-
             SetValue(null);
+
+            base.Dispose();
 
             Display?.Dispose();
             Display = null;

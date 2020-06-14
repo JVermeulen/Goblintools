@@ -24,7 +24,6 @@ namespace Goblintools.RPI.Server.Controllers
                     Controller.BME280.Temperature,
                     Controller.BME280.Pressure,
                     Controller.BME280.Humidity,
-                    Controller.BME280.Altitude,
                 },
                 actors = new
                 {

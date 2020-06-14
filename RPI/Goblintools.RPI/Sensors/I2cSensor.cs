@@ -15,18 +15,25 @@ namespace Goblintools.RPI.Sensors
 
         public I2cSensor(string friendlyName, int deviceAddress) : base(friendlyName, 15)
         {
-            BusId = 1;
-            DeviceAddress = deviceAddress;
+            try
+            {
+                BusId = 1;
+                DeviceAddress = deviceAddress;
 
-            Settings = new I2cConnectionSettings(BusId, DeviceAddress);
-            Device = I2cDevice.Create(Settings);
+                Settings = new I2cConnectionSettings(BusId, DeviceAddress);
+                Device = I2cDevice.Create(Settings);
+            }
+            catch
+            {
+                //
+            }
         }
 
         public new void Dispose()
         {
             base.Dispose();
 
-            Device.Dispose();
+            Device?.Dispose();
             Device = null;
 
             Settings = null;

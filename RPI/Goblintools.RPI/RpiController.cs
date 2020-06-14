@@ -1,4 +1,5 @@
 ﻿using Goblintools.RPI.Actors;
+using Goblintools.RPI.Logic;
 using Goblintools.RPI.Processing;
 using Goblintools.RPI.Sensors;
 using System;
@@ -15,6 +16,7 @@ namespace Goblintools.RPI
         public LedActor RedLED { get; set; }
         public SevenSegmentActor SevenSegment { get; set; }
         public Bme280Sensor BME280 { get; set; }
+        public Generator Generator { get; set; }
 
         public RpiController() : base("RPI Controller", TimeSpan.FromSeconds(15))
         {
@@ -28,8 +30,13 @@ namespace Goblintools.RPI
 
             BME280 = new Bme280Sensor("Temperature, Humidity and Pressure Sensor");
             BME280.ValueChanged.OnReceive.Subscribe(Work);
-
             BME280.Start();
+
+            Generator = new Generator();
+            Generator.ValueChanged.OnReceive.Subscribe(Work);
+            //Generator.Start();
+
+            Start();
         }
 
         public override void Work(object value)
@@ -42,21 +49,26 @@ namespace Goblintools.RPI
 
         private void OnObservation(Observation observation)
         {
-            if (observation.IsSensor)
+            if (Generator != null && observation.DeviceName == Generator.Code)
+                SevenSegment.SetValue(observation.Value.ToString());
+            else  if (observation.Category == "Sensor")
                 WriteToConsole($"Sensor value: {observation}", ConsoleColor.Blue);
-            else
+            else if (observation.Category == "Actor")
                 WriteToConsole($"Actor value: {observation}", ConsoleColor.Green);
+            else
+                WriteToConsole($"{observation.Category} value: {observation}", ConsoleColor.White);
         }
 
         private void OnHeartbeat(Heartbeat heartbeat)
         {
-            var value = Math.Round((double)BME280.Temperature.Value);
+            var value = Math.Round((double)BME280.Temperature.Value, 0);
 
             SevenSegment.SetValue($"{value}°C");
         }
 
         public new void Dispose()
         {
+            Generator?.Dispose();
             RedLED?.Dispose();
             SevenSegment?.Dispose();
             BME280?.Dispose();

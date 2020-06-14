@@ -37,12 +37,13 @@ namespace Goblintools.RPI.Server
             }
 
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //endpoints.MapControllerRoute("DefaultApiWithAction", "{controller}/{action}");
+                //endpoints.MapControllerRoute("DefaultApiGet", "Api/{controller}", new { action = "Get" }, new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) });
+                //endpoints.MapControllerRoute("DefaultApiPost", "Api/{controller}", new { action = "Post" }, new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) });
             });
         }
     }

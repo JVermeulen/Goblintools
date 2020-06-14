@@ -12,6 +12,7 @@ namespace Goblintools.RPI.Processing
 
         public virtual string FriendlyName { get; set; }
         public virtual string Code => this.GetType().Name;
+        public virtual string Category => "Processor";
 
         public Inbox<object> Inbox { get; private set; }
 

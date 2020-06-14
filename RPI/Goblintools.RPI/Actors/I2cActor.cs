@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Device.I2c;
-using System.Text;
 
 namespace Goblintools.RPI.Actors
 {
@@ -15,18 +13,25 @@ namespace Goblintools.RPI.Actors
 
         public I2cActor(string friendlyName, int deviceAddress, TimeSpan interval) : base(friendlyName, interval)
         {
-            BusId = 1;
-            DeviceAddress = deviceAddress;
+            try
+            {
+                BusId = 1;
+                DeviceAddress = deviceAddress;
 
-            Settings = new I2cConnectionSettings(BusId, DeviceAddress);
-            Device = I2cDevice.Create(Settings);
+                Settings = new I2cConnectionSettings(BusId, DeviceAddress);
+                Device = I2cDevice.Create(Settings);
+            }
+            catch
+            {
+                //
+            }
         }
 
         public new void Dispose()
         {
             base.Dispose();
 
-            Device.Dispose();
+            Device?.Dispose();
             Device = null;
 
             Settings = null;

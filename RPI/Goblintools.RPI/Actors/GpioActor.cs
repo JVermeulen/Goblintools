@@ -35,13 +35,20 @@ namespace Goblintools.RPI.Actors
         {
             base.Start();
 
-            if (Controller == null)
+            try
             {
-                Controller = new GpioController();
+                if (Controller == null)
+                {
+                    Controller = new GpioController();
 
-                Controller.OpenPin(Pin, PinMode.Output);
+                    Controller.OpenPin(Pin, PinMode.Output);
 
-                Read();
+                    Read();
+                }
+            }
+            catch (NotSupportedException ex)
+            {
+                Controller = null;
             }
         }
 
@@ -55,7 +62,7 @@ namespace Goblintools.RPI.Actors
 
         public void Read()
         {
-            var observation = new Observation(false, "Led", Value, Value ? "On" : "Off", Code);
+            var observation = new Observation(Category, "Led", Value, Value ? "On" : "Off", Code);
 
             ValueChanged.Send(observation);
         }
