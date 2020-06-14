@@ -23,27 +23,16 @@ namespace Goblintools.RPI.Server.Controllers
             if (keyword == null)
             {
                 return new JsonResult(observations, Controller.DefaultJsonSerializerOptions);
-
-                //var result = new
-                //{
-                //    sensors = new
-                //    {
-                //        Controller.BME280.Temperature,
-                //        Controller.BME280.Pressure,
-                //        Controller.BME280.Humidity,
-                //    },
-                //    actors = new
-                //    {
-                //        Controller.RedLED.LED,
-                //        Controller.SevenSegment.SevenSegment
-                //    },
-                //};
-
-                //return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
             }
             else
             {
-                var result = observations.Where(o => o.Keywords.Contains(keyword.ToLower()));
+                var result = observations.Where(o => new string[]
+                {
+                    o.Category.ToLower(),
+                    o.MachineName.ToLower(),
+                    o.DeviceName.ToLower(),
+                    o.Name.ToLower()
+                }.Contains(keyword.ToLower()));
 
                 return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
             }
