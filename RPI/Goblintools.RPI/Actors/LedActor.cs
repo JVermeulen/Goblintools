@@ -12,6 +12,15 @@ namespace Goblintools.RPI.Actors
             ValueChanged.OnReceive.Subscribe(o => LED = o);
 
             LED = new Observation(Category, "Led", null, string.Empty, Code);
+
+            HardwareDevice = new HardwareDevice
+            {
+                Name = Code,
+                Type = "GPIO",
+                Description = FriendlyName,
+                Address = Pin.ToString(),
+                Manufacturer = "Generic",
+            };
         }
     }
 }

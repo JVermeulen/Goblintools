@@ -64,6 +64,16 @@ namespace Goblintools.RPI.Sensors
 
             Initialize();
 
+            HardwareDevice = new HardwareDevice
+            {
+                Name = Code,
+                Description = FriendlyName,
+                Type = "I2C",
+                Address = $"0x{DefaultI2cAddress.ToString("X2")}",
+                Manufacturer = "Adafruit",
+                Reference = "https://www.adafruit.com/product/466",
+            };
+
             WriteToConsole($"{Code} productId: {ReadCommand1(VCNL4000_Constants.VCNL4000_IRLED)}", ConsoleColor.Cyan);
             WriteToConsole($"{Code} signal frequenct: {(VCNL4000_Frequency)ReadCommand1(VCNL4000_Constants.VCNL4000_SIGNALFREQ)}", ConsoleColor.Cyan);
         }

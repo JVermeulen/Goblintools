@@ -113,6 +113,51 @@ namespace Goblintools.RPI
                 return observations.Where(o => o != null && o.Contains(keyword)).ToList();
         }
 
+        public List<Observation> GetSensors()
+        {
+            return new List<Observation>()
+            {
+                 BME280.Temperature,
+                 BME280.Pressure,
+                 BME280.Humidity,
+                 VCNL4000.AmbientLight,
+                 VCNL4000.Proximity,
+            };
+        }
+
+        public List<Observation> GetActors()
+        {
+            return new List<Observation>()
+            {
+                 RedLED.LED,
+                 SevenSegment.SevenSegment,
+            };
+        }
+
+        public List<HardwareDevice> GetHardwareDevices()
+        {
+            return new List<HardwareDevice>
+            {
+                BME280.HardwareDevice,
+                VCNL4000.HardwareDevice,
+                RedLED.HardwareDevice,
+                SevenSegment.HardwareDevice,
+                new HardwareDevice
+                {
+                    Name = "I2C",
+                    Description="Active I2C addresses",
+                    Type = "Communication",
+                    Address=string.Join(", ", I2cDetector.GetActiveAddresses().Select(a => $"0x{a.ToString("X2")}")),
+                    Reference  = "https://learn.adafruit.com/i2c-addresses",
+                }
+            };
+        }
+
+        public List<int> I2cDetect()
+        {
+            return I2cDetector.GetActiveAddresses();
+        }
+
         public new void Dispose()
         {
             Generator?.Dispose();

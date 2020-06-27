@@ -18,9 +18,23 @@ namespace Goblintools.RPI.Server.Controllers
         [HttpGet]
         public ActionResult Get(string search = null)
         {
-            var result = Controller.SearchObservations(search);
+            if (search != null)
+            {
+                var result = Controller.SearchObservations(search);
 
-            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
+                return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
+            }
+            else
+            {
+                var result = new
+                {
+                    devices = Controller.GetHardwareDevices(),
+                    sensors = Controller.GetSensors(),
+                    actors = Controller.GetActors(),
+                };
+
+                return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
+            }
         }
     }
 }

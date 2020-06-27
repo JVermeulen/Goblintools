@@ -9,9 +9,7 @@ namespace Goblintools.RPI.Sensors
 {
     public class Bme280Sensor : I2cSensor
     {
-        //https://www.adafruit.com/product/2652
         private Bme280 Product { get; set; }
-
         public Observation Temperature { get; private set; }
         public Observation Pressure { get; private set; }
         public Observation Humidity { get; private set; }
@@ -26,6 +24,16 @@ namespace Goblintools.RPI.Sensors
                 Product = new Bme280(Device);
                 Product.SetPowerMode(Bmx280PowerMode.Forced);
             }
+
+            HardwareDevice = new HardwareDevice
+            {
+                Name = Code,
+                Description = FriendlyName,
+                Type = "I2C",
+                Address = $"0x{Bme280.DefaultI2cAddress}",
+                Manufacturer = "Adafruit",
+                Reference = "https://www.adafruit.com/product/2652",
+            };
         }
 
         public override void Start()

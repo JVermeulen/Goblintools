@@ -23,14 +23,21 @@ namespace Goblintools.RPI.Actors
 
         public HttpStatusCode UpdateDevice(string apiUrl, int idx, object nValue, string sValue)
         {
-            var url = Url.Combine(apiUrl, "json.htm")
-                .SetQueryParam("type", "command")
-                .SetQueryParam("param", "udevice")
-                .SetQueryParam("idx", idx)
-                .SetQueryParam("nvalue", nValue)
-                .SetQueryParam("svalue", sValue);
+            try
+            {
+                var url = Url.Combine(apiUrl, "json.htm")
+                    .SetQueryParam("type", "command")
+                    .SetQueryParam("param", "udevice")
+                    .SetQueryParam("idx", idx)
+                    .SetQueryParam("nvalue", nValue)
+                    .SetQueryParam("svalue", sValue);
 
-            return Get(url);
+                return Get(url);
+            }
+            catch
+            {
+                return HttpStatusCode.InternalServerError;
+            }
         }
 
         public HttpStatusCode Get(string url)

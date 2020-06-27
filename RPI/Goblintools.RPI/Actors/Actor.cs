@@ -7,6 +7,8 @@ namespace Goblintools.RPI.Actors
     {
         public override string Category => "Actor";
 
+        public HardwareDevice HardwareDevice { get; set; }
+
         public Observer<Observation> ValueChanged { get; set; }
 
         public Actor(string friendlyName, TimeSpan interval) : base(friendlyName, interval)

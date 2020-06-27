@@ -7,6 +7,8 @@ namespace Goblintools.RPI.Sensors
     {
         public override string Category => "Sensor";
 
+        public HardwareDevice HardwareDevice { get; set; }
+
         public Observer<Observation> ValueChanged { get; set; }
 
         public Sensor(string friendlyName, int interval) : base(friendlyName, TimeSpan.FromSeconds(interval))

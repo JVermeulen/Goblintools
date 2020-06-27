@@ -9,8 +9,6 @@ namespace Goblintools.RPI.Actors
 {
     public class SevenSegmentActor : I2cActor
     {
-        //https://www.adafruit.com/product/881
-
         public override string Code => "HT16K33";
 
         public Observation SevenSegment { get; private set; }
@@ -25,7 +23,7 @@ namespace Goblintools.RPI.Actors
             Values = new Dictionary<string, string>();
 
             SevenSegment = new Observation(Category, FriendlyName, null, string.Empty, Code);
-            
+
             ValueChanged.OnReceive.Subscribe(o => SevenSegment = o);
 
             Brightness = 1;
@@ -34,6 +32,16 @@ namespace Goblintools.RPI.Actors
                 Display = new Large4Digit7SegmentDisplay(Device) { Brightness = Brightness };
 
             SetValue(null);
+
+            HardwareDevice = new HardwareDevice
+            {
+                Name = Code,
+                Description = FriendlyName,
+                Type = "I2C",
+                Address = $"0x{Ht16k33.DefaultI2cAddress.ToString("X2")}",
+                Manufacturer = "Adafruit",
+                Reference = "https://www.adafruit.com/product/881",
+            };
         }
 
         public override void Work(object value)
