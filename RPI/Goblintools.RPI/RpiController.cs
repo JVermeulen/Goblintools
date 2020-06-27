@@ -17,27 +17,42 @@ namespace Goblintools.RPI
         public LedActor RedLED { get; set; }
         public SevenSegmentActor SevenSegment { get; set; }
         public Bme280Sensor BME280 { get; set; }
+        public VCNL4000Sensor VCNL4000 { get; set; }
         public Generator Generator { get; set; }
+        public DomoticzApi API { get; set; }
 
         public RpiController() : base("RPI Controller", TimeSpan.FromSeconds(15))
         {
             RedLED = new LedActor("Red led", 24);
             RedLED.ValueChanged.OnReceive.Subscribe(Work);
-            RedLED.Start();
 
             SevenSegment = new SevenSegmentActor("7-Segment display");
             SevenSegment.ValueChanged.OnReceive.Subscribe(Work);
-            SevenSegment.Start();
 
             BME280 = new Bme280Sensor("Temperature, Humidity and Pressure Sensor");
             BME280.ValueChanged.OnReceive.Subscribe(Work);
-            BME280.Start();
+
+            VCNL4000 = new VCNL4000Sensor("Light");
+            VCNL4000.ValueChanged.OnReceive.Subscribe(Work);
 
             Generator = new Generator();
             Generator.ValueChanged.OnReceive.Subscribe(Work);
-            //Generator.Start();
+
+            API = new DomoticzApi();
 
             Start();
+        }
+
+        public override void Start()
+        {
+            RedLED.Start();
+            SevenSegment.Start();
+            BME280.Start();
+            VCNL4000.Start();
+
+            //Generator.Start();
+
+            base.Start();
         }
 
         public override void Work(object value)
@@ -53,7 +68,16 @@ namespace Goblintools.RPI
             if (Generator != null && observation.DeviceName == Generator.Code)
                 SevenSegment.SetValue(observation.Value.ToString());
             else if (observation.Category == "Sensor")
+            {
                 WriteToConsole($"Sensor value: {observation}", ConsoleColor.Blue);
+
+                if (observation.Name == "Temperature")
+                    API.UpdateDevice("http://192.168.2.204:8080", 1, observation.Value, observation.Text);
+                else if (observation.Name == "Humidity")
+                    API.UpdateDevice("http://192.168.2.204:8080", 3, observation.Value, observation.Text);
+                else if (observation.Name == "Pressure")
+                    API.UpdateDevice("http://192.168.2.204:8080", 4, (double)observation.Value / 1000, observation.Text);
+            }
             else if (observation.Category == "Actor")
                 WriteToConsole($"Actor value: {observation}", ConsoleColor.Green);
             else
@@ -70,18 +94,23 @@ namespace Goblintools.RPI
             }
         }
 
-        public List<Observation> GetObservations()
+        public List<Observation> SearchObservations(string keyword = null)
         {
             var observations = new List<Observation>()
             {
                  BME280.Temperature,
                  BME280.Pressure,
                  BME280.Humidity,
+                 VCNL4000.AmbientLight,
+                 VCNL4000.Proximity,
                  RedLED.LED,
                  SevenSegment.SevenSegment,
             };
 
-            return observations.Where(o => o != null).ToList();
+            if (keyword == null)
+                return observations.Where(o => o != null).ToList();
+            else
+                return observations.Where(o => o != null && o.Contains(keyword)).ToList();
         }
 
         public new void Dispose()
@@ -90,6 +119,7 @@ namespace Goblintools.RPI
             RedLED?.Dispose();
             SevenSegment?.Dispose();
             BME280?.Dispose();
+            VCNL4000?.Dispose();
         }
     }
 }

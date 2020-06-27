@@ -85,8 +85,6 @@ namespace Goblintools.RPI.Sensors
                 if (Product.TryReadAltitude(Iot.Units.Pressure.FromHectopascal(1015), out double altitude))
                 {
                     Altitude = new Observation(Category, "Altitude", Math.Round(altitude, 5), $"{Math.Round(altitude, 0)}m", Code);
-
-                    ValueChanged.Send(Altitude);
                 }
 
                 Product.TemperatureSampling = Sampling.UltraLowPower;
@@ -96,10 +94,17 @@ namespace Goblintools.RPI.Sensors
             }
             else
             {
-                Temperature = new Observation(Category, "Temperature", null, string.Empty, Code);
+                Temperature = new Observation(Category, "Temperature", 20.0, "20°C", Code);
+                ValueChanged.Send(Temperature);
+
                 Pressure = new Observation(Category, "Pressure", null, string.Empty, Code);
+                ValueChanged.Send(Pressure);
+
                 Humidity = new Observation(Category, "Humidity", null, string.Empty, Code);
+                ValueChanged.Send(Humidity);
+
                 Altitude = new Observation(Category, "Altitude", null, string.Empty, Code);
+                ValueChanged.Send(Altitude);
             }
         }
     }

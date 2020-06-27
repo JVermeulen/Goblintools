@@ -12,8 +12,6 @@ namespace Goblintools.RPI.Processing
         public object Value { get; set; }
         public string Text { get; set; }
 
-        //public string[] Keywords => new string[] { Category.ToLower(), MachineName.ToLower(), DeviceName.ToLower(), Name.ToLower() };
-        
         public Observation(string category, string name, object value, string text, string deviceName)
         {
             Category = category;
@@ -24,6 +22,15 @@ namespace Goblintools.RPI.Processing
             Name = name;
             Value = value;
             Text = text;
+        }
+
+        public bool Contains(string keyword)
+        {
+            return keyword == null || 
+                keyword.Equals(Category, StringComparison.OrdinalIgnoreCase) || 
+                keyword.Equals(MachineName, StringComparison.OrdinalIgnoreCase) || 
+                keyword.Equals(DeviceName, StringComparison.OrdinalIgnoreCase) || 
+                keyword.Equals(Name, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string ToString()

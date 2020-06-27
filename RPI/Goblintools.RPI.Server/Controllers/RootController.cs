@@ -16,26 +16,11 @@ namespace Goblintools.RPI.Server.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get(string keyword = null)
+        public ActionResult Get(string search = null)
         {
-            var observations = Controller.GetObservations();
+            var result = Controller.SearchObservations(search);
 
-            if (keyword == null)
-            {
-                return new JsonResult(observations, Controller.DefaultJsonSerializerOptions);
-            }
-            else
-            {
-                var result = observations.Where(o => new string[]
-                {
-                    o.Category.ToLower(),
-                    o.MachineName.ToLower(),
-                    o.DeviceName.ToLower(),
-                    o.Name.ToLower()
-                }.Contains(keyword.ToLower()));
-
-                return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
-            }
+            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
         }
     }
 }

@@ -27,6 +27,7 @@ namespace Goblintools.RPI.Server.Controllers
                     Controller.BME280.Temperature,
                     Controller.BME280.Pressure,
                     Controller.BME280.Humidity,
+                    Controller.VCNL4000.AmbientLight,
                 }
             };
 
@@ -34,11 +35,18 @@ namespace Goblintools.RPI.Server.Controllers
         }
 
         [HttpGet("temperature")]
-        public ActionResult Temperature()
+        public ActionResult Temperature(string format = "JSON")
         {
             var result = Controller.BME280.Temperature;
+            var value = result?.Value != null ? (double)result.Value : 20;
 
-            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
+            switch (format)
+            {
+                case "string":
+                    return new ContentResult { Content = value.ToString("F2") };
+                default:
+                    return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
+            }
         }
 
         [HttpGet("pressure")]
