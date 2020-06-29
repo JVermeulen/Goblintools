@@ -85,12 +85,11 @@ namespace Goblintools.RPI.Processing
             Inbox?.Dispose();
         }
 
-        public void WriteToConsole(string value, ConsoleColor color)
+        public static void WriteToConsole(string value, ConsoleColor color = ConsoleColor.Gray)
         {
             Console.ForegroundColor = color;
             Console.WriteLine(value);
             Console.ResetColor();
         }
-
     }
 }

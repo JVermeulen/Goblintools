@@ -20,6 +20,7 @@ namespace Goblintools.RPI
         public VCNL4000Sensor VCNL4000 { get; set; }
         public Generator Generator { get; set; }
         public DomoticzApi API { get; set; }
+        public AdafruitAPI AdafruitIO { get; set; }
 
         public RpiController() : base("RPI Controller", TimeSpan.FromSeconds(15))
         {
@@ -39,6 +40,7 @@ namespace Goblintools.RPI
             Generator.ValueChanged.OnReceive.Subscribe(Work);
 
             API = new DomoticzApi();
+            AdafruitIO = new AdafruitAPI();
 
             Start();
         }
@@ -72,11 +74,24 @@ namespace Goblintools.RPI
                 WriteToConsole($"Sensor value: {observation}", ConsoleColor.Blue);
 
                 if (observation.Name == "Temperature")
+                {
                     API.UpdateDevice("http://192.168.2.204:8080", 1, observation.Value, observation.Text);
+
+                    AdafruitIO.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                }
                 else if (observation.Name == "Humidity")
+                {
                     API.UpdateDevice("http://192.168.2.204:8080", 3, observation.Value, observation.Text);
+
+                    AdafruitIO.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                }
                 else if (observation.Name == "Pressure")
+                {
                     API.UpdateDevice("http://192.168.2.204:8080", 4, (double)observation.Value / 1000, observation.Text);
+
+                    AdafruitIO.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                }
+
             }
             else if (observation.Category == "Actor")
                 WriteToConsole($"Actor value: {observation}", ConsoleColor.Green);
