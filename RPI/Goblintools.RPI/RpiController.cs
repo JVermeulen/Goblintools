@@ -59,10 +59,17 @@ namespace Goblintools.RPI
 
         public override void Work(object value)
         {
-            if (value is Heartbeat heartbeat)
-                OnHeartbeat(heartbeat);
-            else if (value is Observation observation)
-                OnObservation(observation);
+            try
+            {
+                if (value is Heartbeat heartbeat)
+                    OnHeartbeat(heartbeat);
+                else if (value is Observation observation)
+                    OnObservation(observation);
+            }
+            catch (Exception ex)
+            {
+                WriteToConsole(ex.Message, ConsoleColor.Red);
+            }
         }
 
         private void OnObservation(Observation observation)

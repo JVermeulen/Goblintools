@@ -45,8 +45,15 @@ namespace Goblintools.RPI.Sensors
 
         public override void Work(object value)
         {
-            if (value is Heartbeat heartbeat)
-                Read();
+            try
+            {
+                if (value is Heartbeat heartbeat)
+                    Read();
+            }
+            catch (Exception ex)
+            {
+                WriteToConsole(ex.Message, ConsoleColor.Red);
+            }
         }
 
         public void Read()

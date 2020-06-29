@@ -46,8 +46,15 @@ namespace Goblintools.RPI.Actors
 
         public override void Work(object value)
         {
-            if (value is Heartbeat heartbeat)
-                OnHeartbeat(heartbeat);
+            try
+            {
+                if (value is Heartbeat heartbeat)
+                    OnHeartbeat(heartbeat);
+            }
+            catch (Exception ex)
+            {
+                WriteToConsole(ex.Message, ConsoleColor.Red);
+            }
         }
 
         public void OnHeartbeat(Heartbeat heartbeat)
