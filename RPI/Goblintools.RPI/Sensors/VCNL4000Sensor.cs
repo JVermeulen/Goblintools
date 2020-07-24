@@ -60,22 +60,29 @@ namespace Goblintools.RPI.Sensors
 
         public VCNL4000Sensor(string friendlyName) : base(friendlyName, DefaultI2cAddress)
         {
-            WriteToConsole($"Setting {Code} to 200 mA.", ConsoleColor.Cyan);
-
-            Initialize();
-
-            HardwareDevice = new HardwareDevice
+            try
             {
-                Name = Code,
-                Description = FriendlyName,
-                Type = "I2C",
-                Address = $"0x{DefaultI2cAddress.ToString("X2")}",
-                Manufacturer = "Adafruit",
-                Reference = "https://www.adafruit.com/product/466",
-            };
+                WriteToConsole($"Setting {Code} to 200 mA.", ConsoleColor.Cyan);
 
-            WriteToConsole($"{Code} productId: {ReadCommand1(VCNL4000_Constants.VCNL4000_IRLED)}", ConsoleColor.Cyan);
-            WriteToConsole($"{Code} signal frequenct: {(VCNL4000_Frequency)ReadCommand1(VCNL4000_Constants.VCNL4000_SIGNALFREQ)}", ConsoleColor.Cyan);
+                Initialize();
+
+                HardwareDevice = new HardwareDevice
+                {
+                    Name = Code,
+                    Description = FriendlyName,
+                    Type = "I2C",
+                    Address = $"0x{DefaultI2cAddress.ToString("X2")}",
+                    Manufacturer = "Adafruit",
+                    Reference = "https://www.adafruit.com/product/466",
+                };
+
+                WriteToConsole($"{Code} productId: {ReadCommand1(VCNL4000_Constants.VCNL4000_IRLED)}", ConsoleColor.Cyan);
+                WriteToConsole($"{Code} signal frequenct: {(VCNL4000_Frequency)ReadCommand1(VCNL4000_Constants.VCNL4000_SIGNALFREQ)}", ConsoleColor.Cyan);
+            }
+            catch (Exception ex)
+            {
+                WriteToConsole(ex.Message, ConsoleColor.Red);
+            }
         }
 
         private void Initialize()
@@ -150,29 +157,36 @@ namespace Goblintools.RPI.Sensors
 
         public void Read()
         {
-            if (!base.IsRunning)
-                throw new ApplicationException("Unable to read. Sensor has not started yet.");
-
-            RequestSensorToStartCollectingData();
-
-            SpinWait.SpinUntil(() => ProximityReady, TimeSpan.FromMilliseconds(300));
-            if (ProximityReady)
+            try
             {
-                var proximity = ReadCommand2(VCNL4000_Constants.VCNL4000_PROXIMITYDATA_1);
+                if (!base.IsRunning)
+                    throw new ApplicationException("Unable to read. Sensor has not started yet.");
 
-                Proximity = new Observation(Category, "Proximity", proximity, $"{proximity}", Code);
+                RequestSensorToStartCollectingData();
 
-                ValueChanged.Send(Proximity);
+                SpinWait.SpinUntil(() => ProximityReady, TimeSpan.FromMilliseconds(300));
+                if (ProximityReady)
+                {
+                    var proximity = ReadCommand2(VCNL4000_Constants.VCNL4000_PROXIMITYDATA_1);
+
+                    Proximity = new Observation(Category, "Proximity", proximity, $"{proximity}", Code);
+
+                    ValueChanged.Send(Proximity);
+                }
+
+                SpinWait.SpinUntil(() => AmbientLightReady, TimeSpan.FromMilliseconds(300));
+                if (AmbientLightReady)
+                {
+                    var ambientLight = AmbientLightReady ? ReadCommand2(VCNL4000_Constants.VCNL4000_AMBIENTDATA) : -1;
+
+                    AmbientLight = new Observation(Category, "AmbientLight", ambientLight, $"{ambientLight}lux", Code);
+
+                    ValueChanged.Send(AmbientLight);
+                }
             }
-
-            SpinWait.SpinUntil(() => AmbientLightReady, TimeSpan.FromMilliseconds(300));
-            if (AmbientLightReady)
+            catch (Exception ex)
             {
-                var ambientLight = AmbientLightReady ? ReadCommand2(VCNL4000_Constants.VCNL4000_AMBIENTDATA) : -1;
-
-                AmbientLight = new Observation(Category, "AmbientLight", ambientLight, $"{ambientLight}lux", Code);
-
-                ValueChanged.Send(AmbientLight);
+                WriteToConsole(ex.Message, ConsoleColor.Red);
             }
         }
 

@@ -19,21 +19,28 @@ namespace Goblintools.RPI.Sensors
 
         public Bme280Sensor(string friendlyName) : base(friendlyName, Bme280.DefaultI2cAddress)
         {
-            if (Device != null)
+            try
             {
-                Product = new Bme280(Device);
-                Product.SetPowerMode(Bmx280PowerMode.Forced);
-            }
+                if (Device != null)
+                {
+                    Product = new Bme280(Device);
+                    Product.SetPowerMode(Bmx280PowerMode.Forced);
+                }
 
-            HardwareDevice = new HardwareDevice
+                HardwareDevice = new HardwareDevice
+                {
+                    Name = Code,
+                    Description = FriendlyName,
+                    Type = "I2C",
+                    Address = $"0x{Bme280.DefaultI2cAddress}",
+                    Manufacturer = "Adafruit",
+                    Reference = "https://www.adafruit.com/product/2652",
+                };
+            }
+            catch (Exception ex)
             {
-                Name = Code,
-                Description = FriendlyName,
-                Type = "I2C",
-                Address = $"0x{Bme280.DefaultI2cAddress}",
-                Manufacturer = "Adafruit",
-                Reference = "https://www.adafruit.com/product/2652",
-            };
+                WriteToConsole(ex.Message, ConsoleColor.Red);
+            }
         }
 
         public override void Start()
@@ -107,20 +114,20 @@ namespace Goblintools.RPI.Sensors
                 Product.HumiditySampling = Sampling.UltraLowPower;
                 Product.FilterMode = Bmx280FilteringMode.Off;
             }
-            else
-            {
-                Temperature = new Observation(Category, "Temperature", 20.0, "20°C", Code);
-                ValueChanged.Send(Temperature);
+            //else
+            //{
+            //    Temperature = new Observation(Category, "Temperature", 20.0, "20°C", Code);
+            //    ValueChanged.Send(Temperature);
 
-                Pressure = new Observation(Category, "Pressure", null, string.Empty, Code);
-                ValueChanged.Send(Pressure);
+            //    Pressure = new Observation(Category, "Pressure", null, string.Empty, Code);
+            //    ValueChanged.Send(Pressure);
 
-                Humidity = new Observation(Category, "Humidity", null, string.Empty, Code);
-                ValueChanged.Send(Humidity);
+            //    Humidity = new Observation(Category, "Humidity", null, string.Empty, Code);
+            //    ValueChanged.Send(Humidity);
 
-                Altitude = new Observation(Category, "Altitude", null, string.Empty, Code);
-                ValueChanged.Send(Altitude);
-            }
+            //    Altitude = new Observation(Category, "Altitude", null, string.Empty, Code);
+            //    ValueChanged.Send(Altitude);
+            //}
         }
     }
 }

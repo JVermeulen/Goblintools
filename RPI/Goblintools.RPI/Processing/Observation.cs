@@ -35,7 +35,10 @@ namespace Goblintools.RPI.Processing
 
         public override string ToString()
         {
-            return $"{MachineName}.{DeviceName}.{Name} = {Text ?? Value}.";
+            if (Text != null || Value != null)
+                return $"{MachineName}.{DeviceName}.{Name} = {Text ?? Value}";
+            else
+                return $"{MachineName}.{DeviceName}.{Name} = NULL";
         }
     }
 }

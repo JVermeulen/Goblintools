@@ -65,6 +65,23 @@ namespace Goblintools.RPI.Server.Controllers
             return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
         }
 
+        [HttpPut("oled")]
+        public void SetOled([FromBody] string value)
+        {
+            GetOled(value);
+        }
+
+        [HttpGet("oled")]
+        public ActionResult GetOled(string value = EmptyString)
+        {
+            if (value != EmptyString)
+                Controller.OLED.SetValue(value);
+
+            var result = Controller.OLED.Value;
+
+            return new JsonResult(result, Controller.DefaultJsonSerializerOptions);
+        }
+
         [HttpGet("time")]
         public ActionResult Time()
         {

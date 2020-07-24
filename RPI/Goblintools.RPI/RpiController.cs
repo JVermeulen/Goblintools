@@ -18,6 +18,8 @@ namespace Goblintools.RPI
         public SevenSegmentActor SevenSegment { get; set; }
         public Bme280Sensor BME280 { get; set; }
         public VCNL4000Sensor VCNL4000 { get; set; }
+        public OledActor OLED { get; set; }
+
         public Generator Generator { get; set; }
         public DomoticzApi API { get; set; }
         public AdafruitAPI AdafruitIO { get; set; }
@@ -35,6 +37,9 @@ namespace Goblintools.RPI
 
             VCNL4000 = new VCNL4000Sensor("Light");
             VCNL4000.ValueChanged.OnReceive.Subscribe(Work);
+
+            OLED = new OledActor("Display");
+            OLED.ValueChanged.OnReceive.Subscribe(Work);
 
             Generator = new Generator();
             Generator.ValueChanged.OnReceive.Subscribe(Work);
@@ -75,30 +80,39 @@ namespace Goblintools.RPI
         private void OnObservation(Observation observation)
         {
             if (Generator != null && observation.DeviceName == Generator.Code)
-                SevenSegment.SetValue(observation.Value.ToString());
+            {
+                SevenSegment.SetValue(observation.Value?.ToString());
+                OLED.SetValue(observation.Value?.ToString());
+            }
             else if (observation.Category == "Sensor")
             {
                 WriteToConsole($"Sensor value: {observation}", ConsoleColor.Blue);
 
-                if (observation.Name == "Temperature")
+                if (observation.Value != null)
                 {
-                    API.UpdateDevice("http://192.168.2.204:8080", 1, observation.Value, observation.Text);
+                    if (observation.Name == "Temperature")
+                    {
+                        API?.UpdateDevice("http://192.168.2.204:8080", 1, observation.Value, observation.Text);
 
-                    AdafruitIO.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                        AdafruitIO?.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                    }
+                    else if (observation.Name == "Humidity")
+                    {
+                        API?.UpdateDevice("http://192.168.2.204:8080", 3, observation.Value, observation.Text);
+
+                        AdafruitIO?.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                    }
+                    else if (observation.Name == "Pressure")
+                    {
+                        API?.UpdateDevice("http://192.168.2.204:8080", 4, (double)observation.Value / 1000, observation.Text);
+
+                        AdafruitIO?.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
+                    }
+                    else if (observation.Name == "Display")
+                    {
+                        //
+                    }
                 }
-                else if (observation.Name == "Humidity")
-                {
-                    API.UpdateDevice("http://192.168.2.204:8080", 3, observation.Value, observation.Text);
-
-                    AdafruitIO.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
-                }
-                else if (observation.Name == "Pressure")
-                {
-                    API.UpdateDevice("http://192.168.2.204:8080", 4, (double)observation.Value / 1000, observation.Text);
-
-                    AdafruitIO.SendToServer(observation.Name, Math.Round((double)observation.Value, 2));
-                }
-
             }
             else if (observation.Category == "Actor")
                 WriteToConsole($"Actor value: {observation}", ConsoleColor.Green);
@@ -125,6 +139,7 @@ namespace Goblintools.RPI
                  BME280.Humidity,
                  VCNL4000.AmbientLight,
                  VCNL4000.Proximity,
+                 OLED.Value,
                  RedLED.LED,
                  SevenSegment.SevenSegment,
             };
@@ -153,6 +168,7 @@ namespace Goblintools.RPI
             {
                  RedLED.LED,
                  SevenSegment.SevenSegment,
+                 OLED.Value,
             };
         }
 
@@ -164,6 +180,7 @@ namespace Goblintools.RPI
                 VCNL4000.HardwareDevice,
                 RedLED.HardwareDevice,
                 SevenSegment.HardwareDevice,
+                OLED.HardwareDevice,
                 new HardwareDevice
                 {
                     Name = "I2C",
@@ -187,6 +204,7 @@ namespace Goblintools.RPI
             SevenSegment?.Dispose();
             BME280?.Dispose();
             VCNL4000?.Dispose();
+            OLED?.Dispose();
         }
     }
 }

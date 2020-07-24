@@ -15,12 +15,12 @@ namespace Goblintools.RPI.Actors
         private Large4Digit7SegmentDisplay Display { get; set; }
         private byte Brightness { get; set; }
 
-        public Dictionary<string, string> Values { get; set; }
-        public int Index { get; set; }
+        public Dictionary<string, string> RotatingValues { get; set; }
+        public int RotatingIndex { get; set; }
 
         public SevenSegmentActor(string friendlyName) : base(friendlyName, Ht16k33.DefaultI2cAddress, TimeSpan.FromSeconds(1))
         {
-            Values = new Dictionary<string, string>();
+            RotatingValues = new Dictionary<string, string>();
 
             SevenSegment = new Observation(Category, FriendlyName, null, string.Empty, Code);
 
@@ -61,20 +61,20 @@ namespace Goblintools.RPI.Actors
         {
             SetValue("Time", DateTime.Now.ToString("mm:ss").PadLeft(5));
 
-            if (Index + 1 < Values.Count)
-                Index++;
+            if (RotatingIndex + 1 < RotatingValues.Count)
+                RotatingIndex++;
             else
-                Index = 0;
+                RotatingIndex = 0;
 
             //SetValue(Values.ElementAt(Index).Value);
         }
 
         public void SetValue(string key, string value)
         {
-            if (Values.ContainsKey(key))
-                Values[key] = value;
+            if (RotatingValues.ContainsKey(key))
+                RotatingValues[key] = value;
             else
-                Values.Add(key, value);
+                RotatingValues.Add(key, value);
         }
 
         public void SetValue(DateTime value, string format = "HH:mm")
