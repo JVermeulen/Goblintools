@@ -36,9 +36,14 @@ namespace Goblintools.Types
 
             var json = JsonConvert.SerializeObject(goblinDB);
 
-            var fileName = Path.Combine(destinationPath, $"{goblinDB.Character.Realm}.{goblinDB.Character.Name}.{goblinDB.Timestamp}.json");
+            var archiveFileName = Path.Combine(destinationPath, $"{goblinDB.Character.Realm} - {goblinDB.Character.Name}.zip");
+            var entryName = $"{goblinDB.Character.Realm}.{goblinDB.Character.Name}.{goblinDB.Timestamp}.json";
+
+            var fileName = Path.Combine(destinationPath, entryName);
 
             File.WriteAllText(fileName, json);
+
+            SavedVariableFile.CopyToDestination(archiveFileName, fileName, entryName);
         }
 
         public void CreateImages(string path)

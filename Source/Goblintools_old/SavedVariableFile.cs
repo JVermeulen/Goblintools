@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Goblintools
 {
@@ -31,13 +30,6 @@ namespace Goblintools
                                                       Select(d => new DirectoryInfo(Path.Combine(d.FullName, "WTF", "Account"))).
                                                       SelectMany(d => d.GetDirectories().Where(s => s.Name != "SavedVariables")).
                                                       ToArray();
-
-            //var classicAccountDir = new DirectoryInfo(Path.Combine(wowPath, "_classic_", "WTF", "Account"));
-            //var retailAccountDir = new DirectoryInfo(Path.Combine(wowPath, "_retail_", "WTF", "Account"));
-
-            //var classicDirs = classicAccountDir.GetDirectories().Where(d => d.Name != "SavedVariables");
-            //var retailDirs = retailAccountDir.GetDirectories().Where(d => d.Name != "SavedVariables");
-            //var accountDirs = retailDirs.Union(classicDirs).ToArray();
 
             foreach (var accountDir in accountDirs)
             {
@@ -80,12 +72,62 @@ namespace Goblintools
 
         public static void CopyToDestination(SavedVariableFile file, string destinationPath)
         {
+            //Create destination directory if needed
             if (!Directory.Exists(destinationPath))
                 Directory.CreateDirectory(destinationPath);
 
-            var fileName = Path.Combine(destinationPath, $"{file.Realm}.{file.Character}.{file.TimestampEpoch}.lua");
+            var archiveFileName = Path.Combine(destinationPath, $"{file.Realm} - {file.Character}.zip");
+            var entryName = $"{file.Realm}.{file.Character}.{file.TimestampEpoch}.lua";
 
+            CopyToDestination(archiveFileName, file.File.FullName, entryName);
+
+            //using (var zipStream = new FileStream(zipFileName, FileMode.OpenOrCreate))
+            //using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Update))
+            //{
+            //    using (var input = file.File.OpenRead())
+            //    {
+            //        var entryName = $"{file.Realm}.{file.Character}.{file.TimestampEpoch}.lua";
+
+            //        var entry = archive.GetEntry(entryName);
+
+            //        if (entry == null)
+            //        {
+            //            entry = archive.CreateEntry(entryName);
+
+            //            using (var output = entry.Open())
+            //            {
+            //                input.CopyTo(output);
+            //            }
+            //        }
+            //    }
+            //}
+
+            var fileName = Path.Combine(destinationPath, entryName);
             file.File.CopyTo(fileName, true);
+        }
+
+        public static void CopyToDestination(string archiveFileName, string sourceFileName, string entryName)
+        {
+            using (var zipStream = new FileStream(archiveFileName, FileMode.OpenOrCreate))
+            using (var archive = new ZipArchive(zipStream, ZipArchiveMode.Update))
+            {
+                var file = new FileInfo(sourceFileName);
+
+                using (var input = file.OpenRead())
+                {
+                    var entry = archive.GetEntry(entryName);
+
+                    if (entry == null)
+                    {
+                        entry = archive.CreateEntry(entryName);
+
+                        using (var output = entry.Open())
+                        {
+                            input.CopyTo(output);
+                        }
+                    }
+                }
+            }
         }
     }
 }
