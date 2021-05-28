@@ -127,6 +127,7 @@ namespace Goblintools.RPI
                 var value = Math.Round((double)BME280.Temperature.Value, 0);
 
                 SevenSegment.SetValue($"{value}°C");
+                OLED.SetValue(BME280.Temperature.Value.ToString());
             }
         }
 

@@ -7,7 +7,9 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+
 using Commands = Iot.Device.Ssd13xx.Commands.Ssd1306Commands;
 
 namespace Goblintools.RPI.Actors
@@ -29,8 +31,8 @@ namespace Goblintools.RPI.Actors
             {
                 Oled = new Ssd1306(Device);
                 Initialize();
-                SetValue(null);
-                SetValue($"0x{0x3D.ToString("X2")}");
+                Clear();
+                //SetValue($"0123456789");
             }
 
             HardwareDevice = new HardwareDevice
@@ -84,6 +86,19 @@ namespace Goblintools.RPI.Actors
             //
         }
 
+        public void Clear()
+        {
+            Oled.SendCommand(new Commands.SetColumnAddress());
+            Oled.SendCommand(new Commands.SetPageAddress(Commands.PageAddress.Page0, Commands.PageAddress.Page3));
+
+            for (int i = 0; i < 32; i++)
+            {
+                byte[] data = new byte[16];
+
+                Oled.SendData(data);
+            }
+        }
+
         public void SetValue(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -91,26 +106,50 @@ namespace Goblintools.RPI.Actors
 
             if (Oled != null)
             {
-                Oled.SendCommand(new Commands.SetColumnAddress());
-                Oled.SendCommand(new Commands.SetPageAddress(Commands.PageAddress.Page0, Commands.PageAddress.Page3));
-
-                for (int cnt = 0; cnt < 32; cnt++)
+                if (value == null)
                 {
-                    byte[] data = new byte[16];
-
-                    Oled.SendData(data);
+                    Clear();
                 }
-
-                if (value != null)
+                else
                 {
+                    Clear();
+
                     Oled.SendCommand(new Commands.SetColumnAddress());
                     Oled.SendCommand(new Commands.SetPageAddress(Commands.PageAddress.Page0, Commands.PageAddress.Page3));
 
                     foreach (char character in value)
                     {
-                        Oled.SendData(BasicFont.GetCharacterBytes(character));
+                        var data = BasicFont.GetCharacterBytes(character);
+
+                        Oled.SendData(data);
                     }
+
+                    //byte[] buffer = new byte[128 * 4];
+
+                    //int index = 0;
+
+                    //for (int i = 0; i < value.Length; i++)
+                    //{
+                    //    var data = BasicFont.GetCharacterBytes(value[i]);
+
+                    //    data.CopyTo(buffer, index);
+
+                    //    index += data.Length;
+                    //}
+
+                    //for (int i = 0; i < buffer.Length; i += 16)
+                    //{
+                    //    byte[] data = buffer.Skip(i * 16).Take(16).ToArray();
+
+                    //    Oled.SendData(data);
+                    //}
                 }
+
+                //Oled.SendCommand(new Commands.SetColumnAddress());
+                //Oled.SendCommand(new Commands.SetPageAddress(Commands.PageAddress.Page0, Commands.PageAddress.Page3));
+
+
+
 
                 Value = new Observation(Category, FriendlyName, value, value, Code);
 
