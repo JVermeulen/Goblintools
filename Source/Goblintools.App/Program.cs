@@ -28,7 +28,7 @@ namespace Goblintools.App
                 {
                     x.Service<GTService>(s =>
                     {
-                        s.ConstructUsing(name => new GTService());
+                        s.ConstructUsing(name => new GTService("Hydraxian Waterlords", "Veneficus"));
                         s.WhenStarted(ts => ts.Start());
                         s.WhenStopped(ts => ts.Stop());
                     });

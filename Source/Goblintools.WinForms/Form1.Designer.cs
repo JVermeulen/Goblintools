@@ -35,6 +35,7 @@
             this.mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuWatchCharacters = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuAutoStart = new System.Windows.Forms.ToolStripMenuItem();
             this.SystemTray = new System.Windows.Forms.NotifyIcon(this.components);
             this.SystemTrayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +45,9 @@
             this.cboCharacters = new System.Windows.Forms.ComboBox();
             this.Panel = new System.Windows.Forms.Panel();
             this.updIndex = new System.Windows.Forms.NumericUpDown();
-            this.mnuAutoStart = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmdCreateVideo = new System.Windows.Forms.Button();
+            this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.MainMenu.SuspendLayout();
             this.SystemTrayMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.updIndex)).BeginInit();
@@ -65,6 +68,8 @@
             // mnuFile
             // 
             this.mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadToolStripMenuItem,
+            this.toolStripMenuItem2,
             this.mnuExit});
             this.mnuFile.Name = "mnuFile";
             this.mnuFile.Size = new System.Drawing.Size(37, 20);
@@ -74,7 +79,7 @@
             // 
             this.mnuExit.Name = "mnuExit";
             this.mnuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.mnuExit.Size = new System.Drawing.Size(134, 22);
+            this.mnuExit.Size = new System.Drawing.Size(180, 22);
             this.mnuExit.Text = "E&xit";
             this.mnuExit.Click += new System.EventHandler(this.mnuExit_Click);
             // 
@@ -92,9 +97,16 @@
             this.mnuWatchCharacters.Checked = true;
             this.mnuWatchCharacters.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mnuWatchCharacters.Name = "mnuWatchCharacters";
-            this.mnuWatchCharacters.Size = new System.Drawing.Size(180, 22);
+            this.mnuWatchCharacters.Size = new System.Drawing.Size(167, 22);
             this.mnuWatchCharacters.Text = "Watch Characters";
             this.mnuWatchCharacters.Click += new System.EventHandler(this.mnuWatchClassicCharacters_Click);
+            // 
+            // mnuAutoStart
+            // 
+            this.mnuAutoStart.Name = "mnuAutoStart";
+            this.mnuAutoStart.Size = new System.Drawing.Size(167, 22);
+            this.mnuAutoStart.Text = "Auto Start";
+            this.mnuAutoStart.Click += new System.EventHandler(this.mnuAutoStart_Click);
             // 
             // SystemTray
             // 
@@ -169,18 +181,34 @@
             this.updIndex.TabIndex = 7;
             this.updIndex.ValueChanged += new System.EventHandler(this.updIndex_ValueChanged);
             // 
-            // mnuAutoStart
+            // cmdCreateVideo
             // 
-            this.mnuAutoStart.Name = "mnuAutoStart";
-            this.mnuAutoStart.Size = new System.Drawing.Size(180, 22);
-            this.mnuAutoStart.Text = "Auto Start";
-            this.mnuAutoStart.Click += new System.EventHandler(this.mnuAutoStart_Click);
+            this.cmdCreateVideo.Location = new System.Drawing.Point(450, 27);
+            this.cmdCreateVideo.Name = "cmdCreateVideo";
+            this.cmdCreateVideo.Size = new System.Drawing.Size(75, 23);
+            this.cmdCreateVideo.TabIndex = 8;
+            this.cmdCreateVideo.Text = "Video";
+            this.cmdCreateVideo.UseVisualStyleBackColor = true;
+            this.cmdCreateVideo.Click += new System.EventHandler(this.cmdCreateVideo_Click);
+            // 
+            // loadToolStripMenuItem
+            // 
+            this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadToolStripMenuItem.Text = "Load";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1026, 763);
+            this.Controls.Add(this.cmdCreateVideo);
             this.Controls.Add(this.updIndex);
             this.Controls.Add(this.Panel);
             this.Controls.Add(this.cboCharacters);
@@ -221,6 +249,9 @@
         private System.Windows.Forms.Panel Panel;
         private System.Windows.Forms.NumericUpDown updIndex;
         private System.Windows.Forms.ToolStripMenuItem mnuAutoStart;
+        private System.Windows.Forms.Button cmdCreateVideo;
+        private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
     }
 }
 

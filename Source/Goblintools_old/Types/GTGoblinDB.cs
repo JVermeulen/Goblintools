@@ -34,7 +34,7 @@ namespace Goblintools.Types
             if (!Directory.Exists(destinationPath))
                 Directory.CreateDirectory(destinationPath);
 
-            var json = Windows.Data.Json.JsonConvert.SerializeObject(goblinDB);
+            var json = JsonConvert.SerializeObject(goblinDB);
 
             var fileName = Path.Combine(destinationPath, $"{goblinDB.Character.Realm}.{goblinDB.Character.Name}.{goblinDB.Timestamp}.json");
 

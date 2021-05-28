@@ -219,5 +219,24 @@ namespace Goblintools.WinForms
                 }
             }
         }
+
+        private void cmdCreateVideo_Click(object sender, EventArgs e)
+        {
+            var selectedAccount = (string)cboAccounts.SelectedItem;
+            var selectedCharacter = (string)cboCharacters.SelectedItem;
+
+            if (!string.IsNullOrWhiteSpace(selectedCharacter))
+            {
+                var list = Manager.GetCharacter(selectedAccount, selectedCharacter);
+                var goblinDB = list.FirstOrDefault();
+
+                goblinDB?.CreateVideo(Goblintools.Properties.Settings.Default.OutputPath);
+            }
+        }
+
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SavedVariable.ReadLuaFiles(Goblintools.Properties.Settings.Default.InputPath, "Hydraxian Waterlords", "Veneficus");
+        }
     }
 }

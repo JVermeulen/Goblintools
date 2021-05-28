@@ -98,9 +98,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Goblintools\Goblintools.csproj">
+    <ProjectReference Include="..\Goblintools_old\Goblintools_old.csproj">
       <Project>{19e8a357-b2a0-4e9f-8702-efa780e39738}</Project>
-      <Name>Goblintools</Name>
+      <Name>Goblintools_old</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
